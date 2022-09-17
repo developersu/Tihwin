@@ -4,6 +4,8 @@
 
 OPL-compatible PS2 tool for making split files. Sort of ul.cfg manager or USBUtil.
 
+![Application screenshot](screenshots/1.png)
+
 #### Let's stay in touch
 
 GitHubs are arising and passing, cozy mirrors are eternal: https://git.redrise.ru/desu/Tihwin

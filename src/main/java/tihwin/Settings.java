@@ -35,11 +35,17 @@ public class Settings {
     public String getDestination(){
         return preferences.get("destination", System.getProperty("user.home"));
     }
+    public boolean getDvdSelected(){
+        return preferences.getBoolean("dvd_selected", true);
+    }
 
     public void setDestination(String location){
         preferences.put("destination", location);
     }
     public void setRomLocation(String location){
         preferences.put("rom_location", location);
+    }
+    public void setDvdSelected(boolean value) {
+        preferences.putBoolean("dvd_selected", value);
     }
 }

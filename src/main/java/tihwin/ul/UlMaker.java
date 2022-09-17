@@ -69,35 +69,44 @@ public class UlMaker implements Runnable{
             safeShutdown();
         }
         catch (Exception e){
-            updater.setStatus(resourceBundle.getString("FailedText")+" "+e.getMessage());
             e.printStackTrace();
+            if (! interrupted()) {
+                updater.setStatus(resourceBundle.getString("FailedText") + " " + e.getMessage());
+                return;
+            }
+            safeShutdown();
         }
         finally {
             updater.close();
         }
     }
 
-    private void safeShutdown(){
-        boolean isDeleted = true;
-        for (int i = 0; i < ulConfiguration.getChunksCount(); i++) {
-            File chunkFile = new File(String.format(locationPattern, i));
-            if (chunkFile.exists())
-                isDeleted &= chunkFile.delete();
-        }
+    private void safeShutdown() {
+        updater.setStatus(resourceBundle.getString("PleaseWaitText"));
+        try{
+            boolean isDeleted = true;
+            for (int i = 0; i < ulConfiguration.getChunksCount(); i++) {
+                isDeleted &= Files.deleteIfExists(Paths.get(String.format(locationPattern, i)));
+            }
 
-        if (isDeleted)
-            updater.setStatus(resourceBundle.getString("InterruptedAndFilesDeletedText"));
-        else
-            updater.setStatus(resourceBundle.getString("InterruptedAndFilesNotDeletedText"));
+            if (isDeleted)
+                updater.setStatus(resourceBundle.getString("InterruptedAndFilesDeletedText"));
+            else
+                updater.setStatus(resourceBundle.getString("InterruptedAndFilesNotDeletedText"));
+        }
+        catch (Exception e){
+            updater.setStatus(resourceBundle.getString("FailedText") + " " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void makeUlFile() throws Exception {
         byte[] config = ulConfiguration.generateUlConfig();
 
-        RandomAccessFile raf = new RandomAccessFile(ulLocation+File.separator+"ul.cfg", "rw");
-        raf.seek(raf.length());
-        raf.write(config);
-        raf.close();
+        try (RandomAccessFile raf = new RandomAccessFile(ulLocation+File.separator+"ul.cfg", "rw")){
+            raf.seek(raf.length());
+            raf.write(config);
+        }
     }
     
     private void splitToChunks() throws Exception{
@@ -109,28 +118,27 @@ public class UlMaker implements Runnable{
             main_loop:
             for (int chunkNumber = 0; ; chunkNumber++){
                 String pathname = String.format(locationPattern, chunkNumber);
-                BufferedOutputStream fragmentBos = new BufferedOutputStream(Files.newOutputStream(Paths.get(pathname)));
+                try (BufferedOutputStream fragmentBos = new BufferedOutputStream(Files.newOutputStream(Paths.get(pathname)))){
+                    long counter = 0;
 
-                long counter = 0;
+                    while (counter < 256){
+                        byte[] chunk = new byte[4194304];
 
-                while (counter < 256){
-                    byte[] chunk = new byte[4194304];
+                        if ((readBytesCount = bis.read(chunk)) < 4194304){
+                            if (readBytesCount > 0)
+                                fragmentBos.write(chunk, 0, readBytesCount);
+                            fragmentBos.close();
+                            updater.updateProgressBySize(readBytesCount);
+                            break main_loop;
+                        }
+                        if (interrupted())
+                            throw new InterruptedException();
 
-                    if ((readBytesCount = bis.read(chunk)) < 4194304){
-                        if (readBytesCount > 0)
-                            fragmentBos.write(chunk, 0, readBytesCount);
-                        fragmentBos.close();
+                        fragmentBos.write(chunk);
+                        counter++;
                         updater.updateProgressBySize(readBytesCount);
-                        break main_loop;
                     }
-                    if (interrupted())
-                        throw new InterruptedException();
-
-                    fragmentBos.write(chunk);
-                    counter++;
-                    updater.updateProgressBySize(readBytesCount);
                 }
-                fragmentBos.close();
             }
         }
     }

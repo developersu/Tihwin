@@ -20,6 +20,7 @@
  */
 package tihwin.ul;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -85,14 +86,14 @@ public class UlConfiguration {
     public byte[] generateUlConfig(){
         ByteBuffer byteBuffer = ByteBuffer.allocate(0x40);
         byteBuffer.put(title.getBytes(StandardCharsets.US_ASCII));
-        byteBuffer.position(32);
+        ((Buffer) byteBuffer).position(32);
         byteBuffer.put(("ul."+publisherTitle).getBytes());
-        byteBuffer.position(32+15);
+        ((Buffer) byteBuffer).position(32+15);
         byteBuffer.put(chunksCount);
         byteBuffer.put(cdDvdFlag);
-        byteBuffer.position(53);
+        ((Buffer) byteBuffer).position(53);
         byteBuffer.put((byte) 0x8);        // weird. no idea why it's here
-        byteBuffer.flip();
+        ((Buffer) byteBuffer).flip();
         return byteBuffer.array();
     }
 }

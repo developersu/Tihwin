@@ -4,15 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>loper</groupId>
+    <groupId>ru.redrise</groupId>
     <name>Tihwin</name>
 
     <artifactId>Tihwin</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <url>https://github.com/developersu/${project.artifactId}/</url>
     <description>
-        NS Atmosphere dongle flash tool
+        OPL-compatible PS2 tool for making split files. Sort of ul.cfg manager or USBUtil.
     </description>
     <inceptionYear>2022</inceptionYear>
     <organization>
@@ -36,7 +36,7 @@
                 <role>Developer</role>
             </roles>
             <timezone>+3</timezone>
-            <url>https://developersu.blogspot.com/</url>
+            <url>https://redrise.ru/</url>
         </developer>
     </developers>
 

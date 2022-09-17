@@ -72,7 +72,10 @@ public class MainAppUi extends JFrame {
         destinationSelectBtn.addActionListener(actionEvent -> destinationSelectEventHandler());
         convertBtn.addActionListener(actionEvent -> convertButtonAction());
         ((AbstractDocument) titleField.getDocument()).setDocumentFilter(new TitleFieldFilter());
-
+        if (Settings.INSTANCE.getDvdSelected())
+            DVDRadioButton.setSelected(true);
+        else
+            CDRadioButton.setSelected(true);
         recentRomLocation = Settings.INSTANCE.getRomLocation();
         destinationDirectoryLbl.setText(FilesHelper.getRealFolder(Settings.INSTANCE.getDestination()));
 
@@ -90,6 +93,7 @@ public class MainAppUi extends JFrame {
             public void windowClosing(WindowEvent windowEvent) {
                 Settings.INSTANCE.setRomLocation(recentRomLocation);
                 Settings.INSTANCE.setDestination(destinationDirectoryLbl.getText());
+                Settings.INSTANCE.setDvdSelected(DVDRadioButton.isSelected());
             }
 
             @Override
