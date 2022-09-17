@@ -1,0 +1,30 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: build-install-locally
+    image: maven:3-jdk-11
+    commands:
+      - mvn -B -DskipTests clean install
+      - mvn test -B
+    volumes:
+      - name: m2
+        path: /root/.m2
+
+  - name: archive-artifact
+    image: alpine:latest
+    commands:
+      - mkdir -p /builds/Tihwin
+      - cp target/Tihwin-*[0-9].jar /builds/Tihwin/
+    volumes:
+      - name: builds
+        path: /builds
+
+volumes:
+  - name: m2
+    host:
+      path: /home/docker/drone/files/m2
+  - name: builds
+    host:
+      path: /home/www/builds
