@@ -35,7 +35,7 @@ public class ISO9660 {
         this.resourceBundle = ResourceBundle.getBundle("locale");
         skipFirst16Sectors();
         getRootDirectoryDescriptor();
-        getSystemCnfContent(rootEntry);
+        getSystemCnfContent();
     }
     private void skipFirst16Sectors() throws Exception{
         randomAccessFile.seek(2048*16);
@@ -59,14 +59,14 @@ public class ISO9660 {
         this.rootEntry = new DirectoryEntry(Arrays.copyOfRange(firstPayloadDescriptor, 0x9c, 0xbe));
     }
 
-    private void getSystemCnfContent(DirectoryEntry entry) throws Exception{
-        randomAccessFile.seek(entry.getExtentLocation() * 2048L);
-        byte[] bytes = new byte[entry.getDataSize()];
-        if (entry.getDataSize() != randomAccessFile.read(bytes))
+    private void getSystemCnfContent() throws Exception{
+        randomAccessFile.seek(rootEntry.getExtentLocation() * 2048L);
+        byte[] bytes = new byte[rootEntry.getDataSize()];
+        if (rootEntry.getDataSize() != randomAccessFile.read(bytes))
             throw new Exception(resourceBundle.getString("ISO_CantReadRootDescriptor"));
 
         int entryOffset = 0;
-        while (entryOffset < entry.getDataSize()){
+        while (entryOffset < rootEntry.getDataSize()){
             int entryLength = Byte.toUnsignedInt(bytes[entryOffset]);
 
             if (entryLength == 0)

@@ -23,7 +23,7 @@ import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
 public class DirectoryEntry {
-        private final int extentLocation;   // lsb start
+    private final int extentLocation;   // lsb start
     private final int dataSize;
     private final String identifier;
 

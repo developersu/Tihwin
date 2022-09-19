@@ -18,6 +18,10 @@ GNU GLPv3 or higher. Please see LICENSE.
 
 Create new GitHub issue with bug report or proposition
 
+#### Thanks
+
+* [DDinghoya](https://github.com/DDinghoya), who translated this application to Korean!
+
 #### Translations
 
 Everyone knows that [your_language_here] is the best! And just to make sure, go create PR (pull request) or create an issue with translated `.../src/main/resources/locale.properties`
