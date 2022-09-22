@@ -18,23 +18,25 @@
      along with Tihwin.  If not, see <https://www.gnu.org/licenses/>.
 
  */
-package tihwin.ui;
+package tihwin.ui.ulupdater;
 
-import javax.swing.filechooser.FileFilter;
-import java.io.File;
-import java.util.ResourceBundle;
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
 
-public class IsoFileFilter extends FileFilter {
-    @Override
-    public boolean accept(File file) {
-        if (file.isDirectory())
-            return true;
-        String extension = file.getName().toLowerCase().replaceAll("^.+\\.", "");
-        return extension.equals("iso");
-    }
+public class UlTableContentJButtonRenderer extends DefaultTableCellRenderer {
 
     @Override
-    public String getDescription() {
-        return ResourceBundle.getBundle("locale").getString("isoFilesText");
+    public Component getTableCellRendererComponent(JTable table, Object value,
+                                          boolean isSelected, boolean hasFocus,
+                                          int row, int column){
+        JButton button = (JButton) value;
+        if (hasFocus)
+            button.setBackground(Color.getHSBColor(0.559524f, 0.119658f, 0.917647f));
+        else
+            button.setBackground(Color.getHSBColor(0.5591398f, 0.12156863f, 1));
+
+        return button;
     }
+
 }

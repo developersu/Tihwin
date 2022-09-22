@@ -26,6 +26,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class UlConfiguration {
+    private static final byte DVD_FLAG = 0x14;
+    private static final byte CD_FLAG = 0x12;
+
     private final String title;
     private final String publisherTitle;
     private final String crc32;
@@ -38,9 +41,9 @@ public class UlConfiguration {
         this.crc32 = Integer.toHexString(OplCRC32(title)).toUpperCase();
         this.chunksCount = chunksCount;
         if (isDVD)
-            cdDvdFlag = 0x14;
+            cdDvdFlag = DVD_FLAG;
         else
-            cdDvdFlag = 0x12;
+            cdDvdFlag = CD_FLAG;
     }
 
     private int OplCRC32(String string) throws Exception{

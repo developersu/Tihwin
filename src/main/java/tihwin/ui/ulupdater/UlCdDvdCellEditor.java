@@ -18,23 +18,19 @@
      along with Tihwin.  If not, see <https://www.gnu.org/licenses/>.
 
  */
-package tihwin.ui;
+package tihwin.ui.ulupdater;
 
-import javax.swing.filechooser.FileFilter;
-import java.io.File;
+import javax.swing.*;
 import java.util.ResourceBundle;
 
-public class IsoFileFilter extends FileFilter {
-    @Override
-    public boolean accept(File file) {
-        if (file.isDirectory())
-            return true;
-        String extension = file.getName().toLowerCase().replaceAll("^.+\\.", "");
-        return extension.equals("iso");
+public class UlCdDvdCellEditor extends DefaultCellEditor {
+    static {
+        ResourceBundle bundle = ResourceBundle.getBundle("locale");
+        CD_DVD = new String[]{bundle.getString("CD"), bundle.getString("DVD")};
     }
+    private static final String[] CD_DVD;
 
-    @Override
-    public String getDescription() {
-        return ResourceBundle.getBundle("locale").getString("isoFilesText");
+    public UlCdDvdCellEditor(){
+        super(new JComboBox<>(CD_DVD));
     }
 }

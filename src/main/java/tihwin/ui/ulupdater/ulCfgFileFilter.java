@@ -18,23 +18,21 @@
      along with Tihwin.  If not, see <https://www.gnu.org/licenses/>.
 
  */
-package tihwin.ui;
+package tihwin.ui.ulupdater;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
-import java.util.ResourceBundle;
 
-public class IsoFileFilter extends FileFilter {
+public class ulCfgFileFilter extends FileFilter {
     @Override
     public boolean accept(File file) {
         if (file.isDirectory())
             return true;
-        String extension = file.getName().toLowerCase().replaceAll("^.+\\.", "");
-        return extension.equals("iso");
+        return file.getName().equalsIgnoreCase("ul.cfg");
     }
 
     @Override
     public String getDescription() {
-        return ResourceBundle.getBundle("locale").getString("isoFilesText");
+        return "ul.cfg";
     }
 }

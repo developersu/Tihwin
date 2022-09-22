@@ -20,6 +20,8 @@
     <colspec value="fill:p:noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="fill:d:grow"/>
+    <colspec value="left:4dlu:noGrow"/>
+    <colspec value="fill:p:noGrow"/>
     <constraints>
       <xy x="0" y="0" width="729" height="288"/>
     </constraints>
@@ -33,23 +35,22 @@
         </constraints>
         <properties>
           <background color="-2034433"/>
-          <iconTextGap value="4"/>
           <text resource-bundle="locale" key="SelectBtn"/>
         </properties>
       </component>
       <component id="8e185" class="javax.swing.JTextField" binding="titleField">
         <constraints>
-          <grid row="4" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false">
+          <grid row="4" column="6" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
-          <forms top="0" left="0" bottom="0" right="5"/>
+          <forms/>
         </constraints>
         <properties/>
       </component>
       <component id="b32ec" class="javax.swing.JLabel" binding="destinationDirectoryLbl">
         <constraints>
-          <grid row="6" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="0" bottom="0" right="5"/>
+          <grid row="6" column="6" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
         </constraints>
         <properties>
           <text value=""/>
@@ -58,7 +59,7 @@
       <component id="43fa" class="javax.swing.JLabel" binding="diskImageNameLbl">
         <constraints>
           <grid row="2" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="0" bottom="0" right="5"/>
+          <forms/>
         </constraints>
         <properties>
           <text value=""/>
@@ -107,7 +108,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="CD"/>
+          <text resource-bundle="locale" key="CD"/>
         </properties>
       </component>
       <component id="1dd66" class="javax.swing.JRadioButton" binding="DVDRadioButton" default-binding="true">
@@ -117,12 +118,12 @@
         </constraints>
         <properties>
           <selected value="true"/>
-          <text value="DVD"/>
+          <text resource-bundle="locale" key="DVD"/>
         </properties>
       </component>
       <component id="308a4" class="javax.swing.JButton" binding="convertBtn">
         <constraints>
-          <grid row="8" column="0" row-span="1" col-span="7" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+          <grid row="8" column="0" row-span="1" col-span="9" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <minimum-size width="-1" height="50"/>
           </grid>
           <forms top="0" left="5" bottom="0" right="5"/>
@@ -135,7 +136,7 @@
       <grid id="8b0eb" binding="statusJPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="5" left="5" bottom="5" right="5"/>
         <constraints>
-          <grid row="11" column="0" row-span="1" col-span="7" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="11" column="0" row-span="1" col-span="9" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -169,7 +170,7 @@
       <grid id="a5cce" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="7" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="9" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -188,6 +189,19 @@
           </component>
         </children>
       </grid>
+      <component id="824ea" class="javax.swing.JButton" binding="ulCfgBtn">
+        <constraints>
+          <grid row="2" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="0" bottom="0" right="5"/>
+        </constraints>
+        <properties>
+          <background color="-2031648"/>
+          <margin top="1" left="1" bottom="1" right="1"/>
+          <minimumSize width="130" height="30"/>
+          <preferredSize width="140" height="30"/>
+          <text resource-bundle="locale" key="editUlCfgBtn"/>
+        </properties>
+      </component>
     </children>
   </grid>
   <buttonGroups>
