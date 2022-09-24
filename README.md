@@ -4,7 +4,8 @@
 
 OPL-compatible PS2 tool for making split files. Sort of ul.cfg manager or USBUtil.
 
-![Application screenshot](screenshots/1.png)
+![Application screenshot1](screenshots/1.png)
+![Application screenshot2](screenshots/2.png)
 
 #### Let's stay in touch
 

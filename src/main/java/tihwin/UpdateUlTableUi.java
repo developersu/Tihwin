@@ -32,6 +32,7 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.io.File;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class UpdateUlTableUi extends JFrame {
         super();
         this.resourceBundle = ResourceBundle.getBundle("locale");
         this.ulLocationLbl = new JLabel(ulDestinationLocation);
+        this.recentRomLocation = ulDestinationLocation;
         setupTable();
         setupSaveButton();
 
@@ -86,7 +88,6 @@ public class UpdateUlTableUi extends JFrame {
         setTitle(resourceBundle.getString("ulManager"));
 
         File ulCfgFile = new File(ulDestinationLocation + File.separator + "ul.cfg");
-        this.recentRomLocation = ulDestinationLocation;
         if (ulCfgFile.exists())
             showInTableUlCfgFile(ulCfgFile);
     }
@@ -151,6 +152,7 @@ public class UpdateUlTableUi extends JFrame {
             }
 
             saveChangesBtn.setEnabled(true);
+            ulLocationLbl.setText(ulCfgFile.getParentFile().getAbsolutePath());
             statusLbl.setText(ulCfgFile.getAbsolutePath());
         }
         catch (Exception e){
@@ -193,7 +195,13 @@ public class UpdateUlTableUi extends JFrame {
             // Write new ul.cfg
             UlServiceTools.writeUlCfgFile(ulLocation, finalConfigurationSet);
             File ulCfgFile = new File(ulLocation+File.separator+"ul.cfg");
-            showInTableUlCfgFile(ulCfgFile);
+            if (ulCfgFile.length() == 0) {
+                Files.deleteIfExists(ulCfgFile.toPath());
+                saveChangesBtn.setEnabled(false);
+            }
+            else {
+                showInTableUlCfgFile(ulCfgFile);
+            }
 
             statusLbl.setText(resourceBundle.getString("SuccessText"));
         }
