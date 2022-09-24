@@ -25,13 +25,12 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 public class TitleFieldFilter extends DocumentFilter {
-    private final static int MAX_USER_DEFINED_GAME_TITLE_LENGTH = 31;
+    private final static int MAX_USER_DEFINED_GAME_TITLE_LENGTH = 32;
     public TitleFieldFilter() {}
 
     protected boolean isNotAscii(String str){
         if (str == null)
             return false;
-
         return ! str.matches("\\A\\p{ASCII}*\\z");
     }
 
@@ -40,7 +39,7 @@ public class TitleFieldFilter extends DocumentFilter {
         if (isNotAscii(str))
             return;
         int documentLength = fb.getDocument().getLength();
-        if ((documentLength + str.length()) <= MAX_USER_DEFINED_GAME_TITLE_LENGTH)
+        if ((documentLength + str.length()) < MAX_USER_DEFINED_GAME_TITLE_LENGTH)
             super.insertString(fb, offs, str, attr);
     }
 
@@ -49,7 +48,8 @@ public class TitleFieldFilter extends DocumentFilter {
         if (isNotAscii(str))
             return;
         int documentLength = fb.getDocument().getLength();
-        if ((documentLength + str.length() - length) <= MAX_USER_DEFINED_GAME_TITLE_LENGTH)
+        if ((documentLength + str.length() - length) < MAX_USER_DEFINED_GAME_TITLE_LENGTH)
             super.replace(fb, offs, length, str, attr);
     }
+
 }

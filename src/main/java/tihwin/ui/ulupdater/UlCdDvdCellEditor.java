@@ -21,12 +21,10 @@
 package tihwin.ui.ulupdater;
 
 import javax.swing.*;
-import java.util.ResourceBundle;
 
 public class UlCdDvdCellEditor extends DefaultCellEditor {
     static {
-        ResourceBundle bundle = ResourceBundle.getBundle("locale");
-        CD_DVD = new String[]{bundle.getString("CD"), bundle.getString("DVD")};
+        CD_DVD = new String[]{"CD", "DVD"};
     }
     private static final String[] CD_DVD;
 

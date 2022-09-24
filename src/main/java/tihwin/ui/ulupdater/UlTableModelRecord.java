@@ -20,19 +20,22 @@
  */
 package tihwin.ui.ulupdater;
 
-import javax.swing.filechooser.FileFilter;
-import java.io.File;
+import tihwin.ul.UlConfiguration;
 
-public class ulCfgFileFilter extends FileFilter {
-    @Override
-    public boolean accept(File file) {
-        if (file.isDirectory())
-            return true;
-        return file.getName().equalsIgnoreCase("ul.cfg");
+public class UlTableModelRecord {
+    private final UlConfiguration configuration;
+    private final boolean isConsistent;
+
+    public UlTableModelRecord(UlConfiguration configuration, boolean isConsistent){
+        this.configuration = configuration;
+        this.isConsistent = isConsistent;
     }
 
-    @Override
-    public String getDescription() {
-        return "ul.cfg";
+    public UlConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    public boolean isConsistent() {
+        return isConsistent;
     }
 }

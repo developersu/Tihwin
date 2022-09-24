@@ -82,7 +82,6 @@ public class MainAppUi extends JFrame {
         destinationDirectoryLbl.setText(FilesHelper.getRealFolder(Settings.INSTANCE.getDestination()));
 
         addWindowListener(getWindowListener());
-        new UpdateUlTableUi(new File(destinationDirectoryLbl.getText() + File.separator + "ul.cfg"));
     }
 
     private WindowListener getWindowListener() {
@@ -219,7 +218,7 @@ public class MainAppUi extends JFrame {
     }
 
     private void ulConfigButtonAction() {
-        new UpdateUlTableUi(new File(destinationDirectoryLbl.getText() + File.separator + "ul.cfg"));
+        new UpdateUlTableUi(destinationDirectoryLbl.getText());
     }
 
     {
@@ -266,11 +265,11 @@ public class MainAppUi extends JFrame {
         this.$$$loadLabelText$$$(label3, this.$$$getMessageFromBundle$$$("locale", "TitleLbl"));
         mainPanel.add(label3, cc.xy(5, 5));
         CDRadioButton = new JRadioButton();
-        CDRadioButton.setText("CD");
+        this.$$$loadButtonText$$$(CDRadioButton, this.$$$getMessageFromBundle$$$("locale", "CD"));
         mainPanel.add(CDRadioButton, cc.xy(1, 5));
         DVDRadioButton = new JRadioButton();
         DVDRadioButton.setSelected(true);
-        DVDRadioButton.setText("DVD");
+        this.$$$loadButtonText$$$(DVDRadioButton, this.$$$getMessageFromBundle$$$("locale", "DVD"));
         mainPanel.add(DVDRadioButton, cc.xy(3, 5));
         convertBtn = new JButton();
         convertBtn.setBackground(new Color(-2034433));

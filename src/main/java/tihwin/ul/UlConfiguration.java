@@ -20,9 +20,12 @@
  */
 package tihwin.ul;
 
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Arrays;
 
 public class UlConfiguration {
@@ -34,16 +37,36 @@ public class UlConfiguration {
     private final String crc32;
     private final byte chunksCount;
     private final byte cdDvdFlag;
+    private final boolean romIsDvdImage;
+
+    public UlConfiguration(File ulCfg, int recordNumber) throws Exception{
+        try(BufferedInputStream stream = new BufferedInputStream(Files.newInputStream(ulCfg.toPath()))){
+            int offset = recordNumber * 0x40;
+            int read = 0;
+            while (offset != read)
+                read += stream.skip(offset);
+            byte[] buffer = new byte[0x40];
+            if (0x40 != stream.read(buffer))
+                throw new Exception(recordNumber+" 0x40");
+            this.title = new String(buffer, 0, 0x20, StandardCharsets.US_ASCII).trim();
+            this.publisherTitle = new String(buffer, 0x23, 0xB, StandardCharsets.US_ASCII).trim();
+            this.crc32 = String.format("%08x", OplCRC32(title)).toUpperCase();
+            this.chunksCount = buffer[0x2f];
+            this.cdDvdFlag = buffer[0x30];
+            this.romIsDvdImage = (cdDvdFlag == DVD_FLAG);
+        }
+    }
 
     public UlConfiguration(String title, String publisherTitle, byte chunksCount, boolean isDVD) throws Exception{
         this.title = title;
         this.publisherTitle = publisherTitle;
-        this.crc32 = Integer.toHexString(OplCRC32(title)).toUpperCase();
+        this.crc32 = String.format("%08x", OplCRC32(title)).toUpperCase();
         this.chunksCount = chunksCount;
         if (isDVD)
             cdDvdFlag = DVD_FLAG;
         else
             cdDvdFlag = CD_FLAG;
+        this.romIsDvdImage = isDVD;
     }
 
     private int OplCRC32(String string) throws Exception{
@@ -76,6 +99,14 @@ public class UlConfiguration {
 
     public String getCrc32() {
         return crc32;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public boolean isDvd() {
+        return romIsDvdImage;
     }
 
     public String getPublisherTitle() {

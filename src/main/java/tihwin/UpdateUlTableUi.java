@@ -22,37 +22,38 @@ package tihwin;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import tihwin.ui.*;
 import tihwin.ui.ulupdater.*;
+import tihwin.ul.UlConfiguration;
+import tihwin.ul.UlServiceTools;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.io.File;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.List;
 
 public class UpdateUlTableUi extends JFrame {
     private JTable table;
     private UlTableModel model;
     private JButton saveChangesBtn;
 
-    private JLabel ulLocationLbl, statusLbl;
+    private final JLabel ulLocationLbl;
+    private JLabel statusLbl;
     private String recentRomLocation;
     private final ResourceBundle resourceBundle;
 
-    public UpdateUlTableUi(File ulCfgFile) {
+    public UpdateUlTableUi(String ulDestinationLocation) {
         super();
         this.resourceBundle = ResourceBundle.getBundle("locale");
-        setupUlLocationLbl();
+        this.ulLocationLbl = new JLabel(ulDestinationLocation);
         setupTable();
         setupSaveButton();
 
         FormLayout primaryPanelLayout = new FormLayout(
-                "75dlu, 4dlu, fill:pref:grow",
+                "80dlu, 2dlu, fill:pref:grow",
                 "fill:pref:grow, 25dlu:noGrow, 25dlu:noGrow, fill:pref:noGrow"
         );
         JPanel primaryPanel = new JPanel();
@@ -60,12 +61,16 @@ public class UpdateUlTableUi extends JFrame {
 
         primaryPanel.add(getScrollPane(), new CellConstraints(1, 1, 3, 1,
                 CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(0, 0, 0, 0)));
+
         primaryPanel.add(getSelectUlLocationButton(), new CellConstraints(1, 2, 1, 1,
-                CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(5, 5, 5, 5)));
+                CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(3, 3, 3, 3)));
+
         primaryPanel.add(ulLocationLbl, new CellConstraints(3, 2, 1, 1,
                 CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(0, 0, 0, 0)));
+
         primaryPanel.add(saveChangesBtn, new CellConstraints(1, 3, 3, 1,
-                CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(5, 5, 5, 5)));
+                CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(3, 3, 3, 3)));
+
         primaryPanel.add(getStatusPanel(), new CellConstraints(1, 4, 3, 1,
                 CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(0, 0, 0, 0)));
 
@@ -76,20 +81,16 @@ public class UpdateUlTableUi extends JFrame {
         Image img = new ImageIcon(Objects.requireNonNull(
                 MainAppUi.class.getClassLoader().getResource("tray_icon.gif"))).getImage();
         setIconImage(img);
-        setMinimumSize(new Dimension(800, 500));
+        setMinimumSize(new Dimension(800, 400));
         setVisible(true);
         setTitle(resourceBundle.getString("ulManager"));
-        System.out.println(ulCfgFile.getAbsolutePath());
-        this.recentRomLocation = ulCfgFile.getParent();
+
+        File ulCfgFile = new File(ulDestinationLocation + File.separator + "ul.cfg");
+        this.recentRomLocation = ulDestinationLocation;
         if (ulCfgFile.exists())
             showInTableUlCfgFile(ulCfgFile);
-        setAlwaysOnTop(true); // TODO:DELETE
-        //statusLbl.setText("TEST"); // TODO:DELETE
     }
 
-    private void setupUlLocationLbl(){
-        ulLocationLbl = new JLabel(Settings.INSTANCE.getDestination());
-    }
     private void setupSaveButton(){
         saveChangesBtn = new JButton(resourceBundle.getString("ulManagerWindow_SaveBtn"));
         saveChangesBtn.setBackground(Color.getHSBColor(0.5591398f, 0.12156863f, 1));
@@ -111,10 +112,6 @@ public class UpdateUlTableUi extends JFrame {
         UlTableColumnModel columnModel = new UlTableColumnModel((DefaultTableColumnModel) table.getColumnModel());
         table.setColumnModel(columnModel);
         table.setRowSelectionAllowed(false);
-
-        JTextField textField = new JTextField();
-        ((AbstractDocument) textField.getDocument()).setDocumentFilter(new TitleFieldFilter());
-        table.setDefaultEditor(JLabel.class, new DefaultCellEditor(textField));
     }
     private JScrollPane getScrollPane(){
         JScrollPane scrollPane = new JScrollPane(table);
@@ -137,34 +134,80 @@ public class UpdateUlTableUi extends JFrame {
     }
 
     private void showInTableUlCfgFile(File ulCfgFile){
-        for (int i=0; i<15; i++) {
-            model.addRow(
-                    new UlTableRow(table.getRowCount() + 1, i + "_lent Hi11 **atter** ***ories1", "NORG_000.00", 5, true));
-            model.addRow(
-                    new UlTableRow(table.getRowCount() + 1, "name"+i, "NORG_000.11", 5, false));
-            model.addRow(
-                    new UlTableRow(table.getRowCount() + 1, i+"name", "NORG_000.99", 5, true));
-        }
-        /*-*-*-*-*-*-*-*-**/
-        if (ulCfgFile.length() < 64){
-            statusLbl.setText(resourceBundle.getString("ulManagerWindow_EmptyOrIncorrectText")+" "+ulCfgFile.getAbsolutePath());
-            return;
-        }
-        System.out.println("IMPLMENET ME"); // TODO
+        try{
+            if (ulCfgFile.length() < 64){
+                statusLbl.setText(resourceBundle.getString("ulManagerWindow_EmptyOrIncorrectText")+" "+ulCfgFile.getAbsolutePath());
+                return;
+            }
 
-        saveChangesBtn.setEnabled(true);
-        statusLbl.setText(ulCfgFile.getAbsolutePath());
+            model.clear();
+
+            String ulCfgFileLocation = ulCfgFile.getParentFile().getAbsolutePath();
+
+            for (int i = 0; i < ulCfgFile.length()/64; i++) {
+                UlConfiguration ulConfiguration = new UlConfiguration(ulCfgFile, i);
+                boolean isConsistent = UlServiceTools.verifyChunksCount(ulCfgFileLocation, ulConfiguration);
+                model.addRow(new UlTableModelRecord(ulConfiguration, isConsistent));
+            }
+
+            saveChangesBtn.setEnabled(true);
+            statusLbl.setText(ulCfgFile.getAbsolutePath());
+        }
+        catch (Exception e){
+            statusLbl.setText(resourceBundle.getString("ulManagerWindow_EmptyOrIncorrectText")+" "+e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void saveChangesAction(){
-        System.out.println("IMPLMENET ME"); // TODO
+        try{
+            String ulLocation = ulLocationLbl.getText();
+            
+            List<UlTableModelRecord> modelRecords = model.getInitialRows();
+            List<UlConfiguration> finalConfigurationSet = new ArrayList<>();
+            // Collect what we'll have in the final ul.cfg file
+            for (int i = 0; i < modelRecords.size(); i++){
+                UlConfiguration configuration = new UlConfiguration(
+                        model.getTitle(i),
+                        model.getPublisherTitle(i),
+                        model.getChunksCount(i),
+                        model.getCdDvd(i).equals("DVD")
+                );
+                finalConfigurationSet.add(configuration);
+            }
+            // Updating chunk file names if needed
+            for (int i = 0; i < modelRecords.size(); i++){
+                UlTableModelRecord initialRecord = modelRecords.get(i);
+                String initialRecordTitle = initialRecord.getConfiguration().getTitle();
+                if (initialRecord.isConsistent() && ! model.getTitle(i).equals(initialRecordTitle)){
+                    UlServiceTools.renameChunks(ulLocation,
+                            initialRecord.getConfiguration(),
+                            finalConfigurationSet.get(i));
+                }
+            }
+            // Remove chunks in case user removed record from the table
+            List<UlTableModelRecord> removedRows = model.getRemovedRows();
+            for (UlTableModelRecord removedRow : removedRows) {
+                UlServiceTools.removeChunks(ulLocation, removedRow.getConfiguration());
+            }
+            // Write new ul.cfg
+            UlServiceTools.writeUlCfgFile(ulLocation, finalConfigurationSet);
+            File ulCfgFile = new File(ulLocation+File.separator+"ul.cfg");
+            showInTableUlCfgFile(ulCfgFile);
+
+            statusLbl.setText(resourceBundle.getString("SuccessText"));
+        }
+        catch (Exception e){
+            statusLbl.setText(resourceBundle.getString("ulManagerWindow_SaveChangesFailureText")+" "+e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void selectUlCfgAction(){
         try {
             JFileChooser fileChooser = new JFileChooser(FilesHelper.getRealFolder(recentRomLocation));
             fileChooser.setDialogTitle(resourceBundle.getString("ulManagerWindow_SelectUlCfgBtn"));
-            fileChooser.setFileFilter(new ulCfgFileFilter());
+            fileChooser.setFileFilter(new UlCfgFileFilter());
             if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 recentRomLocation = file.getParent();

@@ -20,19 +20,19 @@
  */
 package tihwin.ui.ulupdater;
 
-import javax.swing.*;
-import javax.swing.table.TableCellEditor;
-import java.awt.*;
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
 
-public class UlButtonCellEditor extends AbstractCellEditor implements TableCellEditor {
+public class UlCfgFileFilter extends FileFilter {
     @Override
-    public Object getCellEditorValue() {
-        return null;
+    public boolean accept(File file) {
+        if (file.isDirectory())
+            return true;
+        return file.getName().equalsIgnoreCase("ul.cfg");
     }
 
     @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        ((UlTableModel) table.getModel()).removeRow(row);
-        return null;
+    public String getDescription() {
+        return "ul.cfg";
     }
 }

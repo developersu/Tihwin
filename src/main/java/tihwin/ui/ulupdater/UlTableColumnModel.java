@@ -20,9 +20,13 @@
  */
 package tihwin.ui.ulupdater;
 
+import tihwin.ui.TitleFieldFilter;
+
+import javax.swing.*;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
+import javax.swing.text.AbstractDocument;
 import java.util.Enumeration;
 
 public class UlTableColumnModel extends DefaultTableColumnModel {
@@ -37,7 +41,8 @@ public class UlTableColumnModel extends DefaultTableColumnModel {
         getColumn(0).setMaxWidth(50);
 
         getColumn(1).setMinWidth(200);
-        getColumn(1).setPreferredWidth(225);
+        getColumn(1).setPreferredWidth(230);
+        getColumn(1).setMaxWidth(300);
 
         getColumn(2).setMinWidth(100);
         getColumn(2).setPreferredWidth(135);
@@ -50,6 +55,14 @@ public class UlTableColumnModel extends DefaultTableColumnModel {
         getColumn(4).setMinWidth(50);
         getColumn(4).setPreferredWidth(75);
         getColumn(4).setMaxWidth(100);
+
+        getColumn(5).setMinWidth(100);
+        getColumn(5).setPreferredWidth(135);
+        getColumn(5).setMaxWidth(150);
+
+        JTextField textField = new JTextField();
+        ((AbstractDocument) textField.getDocument()).setDocumentFilter(new TitleFieldFilter());
+        getColumn(1).setCellEditor(new DefaultCellEditor(textField));
 
         getColumn(4).setCellEditor(new UlCdDvdCellEditor());
 
