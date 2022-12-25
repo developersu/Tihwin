@@ -18,15 +18,19 @@
  */
 package tihwin;
 
+import java.util.Locale;
 import java.util.prefs.Preferences;
 
 public class Settings {
     public static final Settings INSTANCE = new Settings();
 
     private final Preferences preferences;
+    private final Locale locale;
 
     Settings(){
         this.preferences = Preferences.userRoot().node("tihwin");
+        String localeCode = preferences.get("locale", Locale.getDefault().toString());
+        this.locale = new Locale(localeCode.substring(0, 2), localeCode.substring(3));
     }
 
     public String getRomLocation(){
@@ -48,4 +52,7 @@ public class Settings {
     public void setDvdSelected(boolean value) {
         preferences.putBoolean("dvd_selected", value);
     }
+
+    public Locale getLocale(){ return this.locale; }
+    public void setLocale(String localeId){ preferences.put("locale", localeId); }
 }

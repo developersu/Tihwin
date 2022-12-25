@@ -20,11 +20,13 @@ package tihwin;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class Main {
     public static void main(String[] args) {
+        Locale.setDefault(Settings.INSTANCE.getLocale());
         String appVersion = ResourceBundle.getBundle("app").getString("_version");
         MainAppUi frame = new MainAppUi("Tihwin "+appVersion);
 

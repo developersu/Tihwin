@@ -27,9 +27,19 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class UlTableModel extends DefaultTableModel {
-    static {
+
+    private final String REMOVE_ME_BUTTON_TEXT;
+    
+    private final String OK_STATUS;
+    private final String INCONSISTENT_STATUS;
+
+    private final List<UlTableModelRecord> rows;
+    private final List<UlTableModelRecord> removedRows;
+
+    public UlTableModel(){
+        super();
         ResourceBundle bundle = ResourceBundle.getBundle("locale");
-        COLUMNS = new String[]{
+        String[] columns = new String[]{
                 bundle.getString("ulManagerWindow_ColumnNameNumber"),
                 bundle.getString("ulManagerWindow_ColumnNameTitle"),
                 bundle.getString("ulManagerWindow_ColumnNamePublisherTitle"),
@@ -37,23 +47,11 @@ public class UlTableModel extends DefaultTableModel {
                 bundle.getString("ulManagerWindow_ColumnCdDvdFlag"),
                 "",
                 ""};
+        super.setColumnIdentifiers(columns);
         REMOVE_ME_BUTTON_TEXT = bundle.getString("ulManagerWindow_Row_RemoveRowBtn");
         OK_STATUS = bundle.getString("Ok");
         INCONSISTENT_STATUS = bundle.getString("ulManagerWindow_InconsistentFileText");
-    }
-    private static final String[] COLUMNS;
 
-    private static final String REMOVE_ME_BUTTON_TEXT;
-    
-    private static final String OK_STATUS;
-    private static final String INCONSISTENT_STATUS;
-
-    private final List<UlTableModelRecord> rows;
-    private final List<UlTableModelRecord> removedRows;
-
-    public UlTableModel(){
-        super();
-        super.setColumnIdentifiers(COLUMNS);
         this.rows = new ArrayList<>();
         this.removedRows = new ArrayList<>();
     }

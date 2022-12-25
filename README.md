@@ -1,7 +1,9 @@
 ## Tihwin
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg) ![LatestVer](https://img.shields.io/github/release/developersu/Tihwin.svg) [![Build Status](https://ci.redrise.ru/api/badges/desu/Tihwin/status.svg)](https://ci.redrise.ru/desu/Tihwin)
 
-OPL-compatible PS2 tool for making split files. Sort of ul.cfg manager or USBUtil.
+[по-русски](README_RU.md)
+
+OPL-compatible PS2 tool for making split files. Sort of ul.cfg manager or USBUtil. Good for use on mac and linux.
 
 ![Application screenshot1](screenshots/1.png)
 ![Application screenshot2](screenshots/2.png)
@@ -14,6 +16,10 @@ GitHubs are arising and passing, cozy mirrors are eternal: https://git.redrise.r
 
 GNU GLPv3 or higher. Please see LICENSE.
 
+#### Requirements
+
+* Java
+
 #### Feedback
 
 Create new GitHub issue with bug report or proposition
@@ -21,6 +27,7 @@ Create new GitHub issue with bug report or proposition
 #### Thanks
 
 * [DDinghoya](https://github.com/DDinghoya), who translated this application to Korean!
+* [Ignacio Grosso](https://github.com/blckbearx), who translated this application to Spanish!
 
 #### Translations
 

@@ -3,8 +3,8 @@ type: docker
 name: default
 
 steps:
-  - name: build-install-locally
-    image: maven:3-jdk-11
+  - name: build
+    image: maven:3-openjdk-17
     commands:
       - mvn -B -DskipTests clean install
       - mvn test -B
@@ -17,6 +17,7 @@ steps:
     commands:
       - mkdir -p /builds/Tihwin
       - cp target/Tihwin-*[0-9].jar /builds/Tihwin/
+      - cp target/Tihwin-*[0-9].exe /builds/Tihwin/
     volumes:
       - name: builds
         path: /builds

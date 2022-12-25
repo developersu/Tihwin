@@ -8,7 +8,7 @@
     <name>Tihwin</name>
 
     <artifactId>Tihwin</artifactId>
-    <version>2.1</version>
+    <version>2.2</version>
 
     <url>https://github.com/developersu/${project.artifactId}/</url>
     <description>
@@ -117,6 +117,48 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <version>2.2.0</version>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>l4j-Tihwin</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <icon>tw_icon.ico</icon>
+                            <outfile>target/Tihwin-${project.version}-${maven.build.timestamp}.exe</outfile>
+                            <jar>target/${project.artifactId}-${project.version}-${maven.build.timestamp}.jar</jar>
+                            <errTitle>Tihwin</errTitle>
+                            <classPath>
+                                <mainClass>tihwin.Main</mainClass>
+                                <addDependencies>false</addDependencies>
+                                <preCp>anything</preCp>
+                            </classPath>
+                            <jre>
+                                <minVersion>1.8.0</minVersion>
+                                <path>%JAVA_HOME%;%PATH%</path>
+                            </jre>
+                            <versionInfo>
+                                <fileVersion>${project.version}.0.0</fileVersion>
+                                <txtFileVersion>${project.version}</txtFileVersion>
+                                <fileDescription>ul.cfg utility</fileDescription>
+                                <copyright>GNU General Public License v3, 2022 ${project.organization.name}, Russia</copyright>
+                                <productVersion>${project.version}.0.0</productVersion>
+                                <txtProductVersion>${project.version}</txtProductVersion>
+                                <companyName>${project.organization.name}</companyName>
+                                <productName>${project.name}</productName>
+                                <internalName>${project.name}</internalName>
+                                <originalFilename>${project.name}.exe</originalFilename>
+                            </versionInfo>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
