@@ -24,7 +24,6 @@ import tihwin.ui.model.LocaleHolder;
 import tihwin.ui.model.SettingsLanguagesSetup;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.util.List;
@@ -41,9 +40,8 @@ public class LanguageComboBox extends JComboBox<LocaleHolder> {
         setUI(new BasicComboBoxUI(){
             @Override
             protected JButton createArrowButton() {
-                BasicArrowButton button = new BasicArrowButton(BasicArrowButton.SOUTH,
-                        COLOR_SKY_BLUE, COLOR_SKY_BLUE, Color.white, COLOR_SKY_BLUE);
-
+                JButton button = new JButton();
+                button.setBackground(COLOR_SKY_BLUE);
                 button.setBorder(BorderFactory.createEmptyBorder());
                 button.setVisible(false);
                 return button;

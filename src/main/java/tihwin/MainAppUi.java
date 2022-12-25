@@ -30,6 +30,7 @@ import tihwin.ul.UlMaker;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -87,12 +88,16 @@ public class MainAppUi extends JFrame {
         recentRomLocation = Settings.INSTANCE.getRomLocation();
         destinationDirectoryLbl.setText(FilesHelper.getRealFolder(Settings.INSTANCE.getDestination()));
         addWindowListener(getWindowListener());
+
         Border fitMoreTextOnButtonBorder = BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.lightGray),
+                BorderFactory.createLineBorder(Color.gray),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5));
         diskImageSelectBtn.setBorder(fitMoreTextOnButtonBorder);
         destinationSelectBtn.setBorder(fitMoreTextOnButtonBorder);
+        diskImageSelectBtn.addMouseListener(new TwButtonsActionListener());
+        destinationSelectBtn.addMouseListener(new TwButtonsActionListener());
 
+        titleField.setBorder(new LineBorder(Color.lightGray));
     }
 
     private WindowListener getWindowListener() {
