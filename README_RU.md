@@ -26,6 +26,7 @@ GNU GLPv3 или выше. Ознакомьтесь с файлом LICENSE.
 
 * [DDinghoya](https://github.com/DDinghoya), кто перевели приложение на Корейский!
 * [Ignacio Grosso](https://github.com/blckbearx), кто перевели приложение на Испанский!
+* [kuragehime](https://github.com/kuragehimekurara1), кто перевели приложение на Японский и языки Рюкю!
 
 #### Переводы
 

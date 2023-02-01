@@ -37,7 +37,10 @@ public class LocaleHolder {
             country = localeFileName.substring(10, 12);
         this.locale = new Locale(language, country);
         this.localeCode = locale.toString();
-        this.languageName = locale.getDisplayLanguage(locale).toUpperCase();
+        if (country.equals("RYU")) // Ryukyuan
+            this.languageName = "琉球語派";
+        else
+            this.languageName = locale.getDisplayLanguage(locale).toUpperCase();
     }
 
     @Override

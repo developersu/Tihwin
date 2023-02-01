@@ -28,6 +28,7 @@ Create new GitHub issue with bug report or proposition
 
 * [DDinghoya](https://github.com/DDinghoya), who translated this application to Korean!
 * [Ignacio Grosso](https://github.com/blckbearx), who translated this application to Spanish!
+* [kuragehime](https://github.com/kuragehimekurara1), who translated this application to Japanese and Ryukyuan languages!
 
 #### Translations
 
