@@ -1,6 +1,11 @@
 ## Tihwin
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg) ![LatestVer](https://img.shields.io/github/release/developersu/Tihwin.svg) [![Build Status](https://ci.redrise.ru/api/badges/desu/Tihwin/status.svg)](https://ci.redrise.ru/desu/Tihwin)
 
+#### Другие языки
+[Английский язык](README.md)
+[Японский язык](README_JP.md)
+[Рюкюские языки](README_RYU.md)
+
 Это OPL-совместимая утилита для PS2. Используется для создания т.н. «сплит-файлов». Это что-то вроде менеджера ul.cfg или, другими словами, аналог USBUtil. Отличной подойдёт для использования в маке и линуксе.
 
 ![Application screenshot1](screenshots/1.png)
