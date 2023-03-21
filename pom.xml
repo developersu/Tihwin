@@ -126,7 +126,7 @@
                 <artifactId>launch4j-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>l4j-Tihwin</id>
+                        <id>l4j-${project.name}</id>
                         <phase>package</phase>
                         <goals>
                             <goal>launch4j</goal>
@@ -134,9 +134,9 @@
                         <configuration>
                             <headerType>gui</headerType>
                             <icon>tw_icon.ico</icon>
-                            <outfile>target/Tihwin-${project.version}-${maven.build.timestamp}.exe</outfile>
+                            <outfile>target/${project.name}-${project.version}-${maven.build.timestamp}.exe</outfile>
                             <jar>target/${project.artifactId}-${project.version}-${maven.build.timestamp}.jar</jar>
-                            <errTitle>Tihwin</errTitle>
+                            <errTitle>${project.name} launching error</errTitle>
                             <classPath>
                                 <mainClass>tihwin.Main</mainClass>
                                 <addDependencies>false</addDependencies>
@@ -144,13 +144,13 @@
                             </classPath>
                             <jre>
                                 <minVersion>1.8.0</minVersion>
-                                <path>%JAVA_HOME%;%PATH%</path>
+                                <path>%PWD%/jdk;%JAVA_HOME%;%PATH%</path>
                             </jre>
                             <versionInfo>
                                 <fileVersion>${project.version}.0.0</fileVersion>
                                 <txtFileVersion>${project.version}</txtFileVersion>
                                 <fileDescription>ul.cfg utility</fileDescription>
-                                <copyright>GNU General Public License v3, 2022 ${project.organization.name}, Russia</copyright>
+                                <copyright>GNU General Public License v3, ${project.inceptionYear} ${project.organization.name}, Russia</copyright>
                                 <productVersion>${project.version}.0.0</productVersion>
                                 <txtProductVersion>${project.version}</txtProductVersion>
                                 <companyName>${project.organization.name}</companyName>
@@ -158,6 +158,12 @@
                                 <internalName>${project.name}</internalName>
                                 <originalFilename>${project.name}.exe</originalFilename>
                             </versionInfo>
+                            <messages>
+                                <startupErr>Startup error</startupErr>
+                                <jreNotFoundErr>JDK not found</jreNotFoundErr>
+                                <jreVersionErr>JDK Version mismatch</jreVersionErr>
+                                <launcherErr>Launcher Error</launcherErr>
+                            </messages>
                         </configuration>
                     </execution>
                 </executions>
