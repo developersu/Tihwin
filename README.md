@@ -2,9 +2,9 @@
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg) ![LatestVer](https://img.shields.io/github/release/developersu/Tihwin.svg) [![Build Status](https://ci.redrise.ru/api/badges/desu/Tihwin/status.svg)](https://ci.redrise.ru/desu/Tihwin)
 
 #### Other languages
-[![Russian](flag/ru-flag)](README_RU.md) 
-[![Japanese](flag/jp-flag)](README_JP.md) 
-[![Ryukyuan](flag/jp-flag)](README_RYU.md)(Ryukyuan)
+[![Russian](flag/ru-flag.svg)](README_RU.md) 
+[![Japanese](flag/jp-flag.svg)](README_JP.md) 
+[![Ryukyuan](flag/jp-flag.svg)](README_RYU.md)(Ryukyuan)
 
 OPL-compatible PS2 tool for making split files. Sort of ul.cfg manager or USBUtil. Good for use on mac and linux.
 

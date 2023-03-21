@@ -43,3 +43,6 @@ volumes:
   - name: builds
     host:
       path: /home/www/builds
+  - name: jdk
+    host:
+      path: /home/docker/drone/files/assembly/openjdk-19.0.2
