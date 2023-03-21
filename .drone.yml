@@ -34,7 +34,7 @@ steps:
       - name: builds
         path: /builds
       - name: jdk
-        path: /drone/src/misc/windows/NSIS/jdk
+        path: /drone/src/NSIS/jdk
 
 volumes:
   - name: m2
