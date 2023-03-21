@@ -12,7 +12,7 @@ steps:
       - name: m2
         path: /root/.m2
 
-  - name: archive-artifact
+  - name: archive-artifacts
     image: alpine:latest
     commands:
       - mkdir -p /builds/Tihwin
@@ -21,6 +21,20 @@ steps:
     volumes:
       - name: builds
         path: /builds
+
+  - name: make-win-installer
+    image: wheatstalk/makensis:3
+    commands:
+      - cp target/Tihwin-*.exe NSIS/Tihwin.exe
+      - NSIS/update_version.sh
+      - cd NSIS
+      - makensis -V4 ./installer.nsi
+      - cp Installer-*.exe /builds/Tihwin/
+    volumes:
+      - name: builds
+        path: /builds
+      - name: jdk
+        path: /drone/src/misc/windows/NSIS/jdk
 
 volumes:
   - name: m2

@@ -2,9 +2,7 @@
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg) ![LatestVer](https://img.shields.io/github/release/developersu/Tihwin.svg) [![Build Status](https://ci.redrise.ru/api/badges/desu/Tihwin/status.svg)](https://ci.redrise.ru/desu/Tihwin)
 
 #### 他ぬ言語
-[英語](README.md)
-[やまとぅぐち](README_JP.md)
-[ロシア語](README_RU.md)
+![英語](README.md) ![やまとぅぐち](README_JP.md) ![ロシア語](README_RU.md)
 
 分割ファイル作成するたみぬOPL互換ぬPS2ツール。 ul.cfgマネージャーあらんでぃUSBUtilぬ並べい替い。MacうゆびLinuxっしぬ使用んかい適ちょーいびーん。
 
