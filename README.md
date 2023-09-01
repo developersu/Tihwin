@@ -3,9 +3,9 @@
 
 #### Other languages
 [![Russian](flag/ru-flag.svg)](README_RU.md) 
+[![Spanish](flag/es-flag.svg)](README_ES.md) 
 [![Japanese](flag/jp-flag.svg)](README_JP.md) 
-[![Ryukyuan](flag/jp-flag.svg)](README_RYU.md)(Ryukyuan)
-[![Spanish](flag/es-flag.svg)](README_ES.md)
+[![Ryukyuan](flag/jp-flag.svg)](README_RYU.md)(Ryukyuan) 
 
 OPL-compatible PS2 tool for making split files. Sort of ul.cfg manager or USBUtil. Good for use on mac and linux.
 

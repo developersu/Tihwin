@@ -2,10 +2,10 @@
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg) ![LatestVer](https://img.shields.io/github/release/developersu/Tihwin.svg) [![Build Status](https://ci.redrise.ru/api/badges/desu/Tihwin/status.svg)](https://ci.redrise.ru/desu/Tihwin)
 
 #### Otros idiomas
-[![Inglés](flag/us-flag.svg)](README.md)
+[![Inglés](flag/us-flag.svg)](README.md) 
 [![Ruso](flag/ru-flag.svg)](README_RU.md) 
 [![Japonés](flag/jp-flag.svg)](README_JP.md) 
-[![Ryukyuan](flag/jp-flag.svg)](README_RYU.md)(Ryukyuan)
+[![Ryukyuan](flag/jp-flag.svg)](README_RYU.md)(Ryukyuan) 
 
 Herramienta compatible con OPL para crear archivos de juego fraccionados. Similar a "ul.cfg manager" o "USBUtil". Compatible con Mac y Linux.
 
@@ -42,4 +42,4 @@ Todos sabemos que [tu_idioma] es el mejor! Por esto, por favor crea un "PR" ("Pu
 
 #### Apoyo
 
-Dale una estrella de GitHub al proyecto.
+Dale una estrella al proyecto en GitHub.
