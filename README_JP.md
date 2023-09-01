@@ -5,6 +5,7 @@
 [![英語](flag/us-flag.svg)](README.md) 
 [![ロシア語](flag/ru-flag.svg)](README_RU.md) 
 [![琉球諸語](flag/jp-flag.svg)](README_RYU.md)(琉球諸語)
+[![スペイン語](flag/es-flag.svg)](README_ES.md)
 
 分割ファイルを作成するためのOPL互換のPS2ツール。 ul.cfg ネージャーまたはUSBUtilの並べ替え。MacおよびLinuxでの使用に適しています。
 

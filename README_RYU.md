@@ -5,6 +5,7 @@
 [![英語](flag/us-flag.svg)](README.md) 
 [![やまとぅぐち](flag/jp-flag.svg)](README_JP.md)(やまとぅぐち) 
 [![ロシア語](flag/ru-flag.svg)](README_RU.md)
+[![Spanish](flag/es-flag.svg)](README_ES.md)
 
 分割ファイル作成するたみぬOPL互換ぬPS2ツール。 ul.cfgマネージャーあらんでぃUSBUtilぬ並べい替い。MacうゆびLinuxっしぬ使用んかい適ちょーいびーん。
 
