@@ -33,8 +33,8 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Locale;
@@ -73,6 +73,7 @@ public class MainAppUi extends JFrame {
         resourceBundle = ResourceBundle.getBundle("locale");
         AwesomeMediator.setMainUi(this);
         setLocationRelativeTo(null); // Set window on [kinda] center
+        new FilesDropListener(mainPanel);
         setContentPane(mainPanel);
         statusJPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.darkGray));
         convertBtn.setEnabled(false);
@@ -87,7 +88,15 @@ public class MainAppUi extends JFrame {
             CDRadioButton.setSelected(true);
         recentRomLocation = Settings.INSTANCE.getRomLocation();
         destinationDirectoryLbl.setText(FilesHelper.getRealFolder(Settings.INSTANCE.getDestination()));
-        addWindowListener(getWindowListener());
+        addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                Settings.INSTANCE.setRomLocation(recentRomLocation);
+                Settings.INSTANCE.setDestination(destinationDirectoryLbl.getText());
+                Settings.INSTANCE.setDvdSelected(DVDRadioButton.isSelected());
+                Settings.INSTANCE.setLocale(((LocaleHolder) ulLangComboBox.getSelectedItem()).getLocaleCode());
+            }
+        });
 
         Border fitMoreTextOnButtonBorder = BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.gray),
@@ -100,68 +109,30 @@ public class MainAppUi extends JFrame {
         titleField.setBorder(new LineBorder(Color.lightGray));
     }
 
-    private WindowListener getWindowListener() {
-        return new WindowListener() {
-            @Override
-            public void windowClosing(WindowEvent windowEvent) {
-                Settings.INSTANCE.setRomLocation(recentRomLocation);
-                Settings.INSTANCE.setDestination(destinationDirectoryLbl.getText());
-                Settings.INSTANCE.setDvdSelected(DVDRadioButton.isSelected());
-                Settings.INSTANCE.setLocale(
-                        ((LocaleHolder) ulLangComboBox.getSelectedItem()).getLocaleCode());
-            }
-
-            @Override
-            public void windowOpened(WindowEvent windowEvent) {
-                diskImageSelectBtn.grabFocus();
-            }
-
-            @Override
-            public void windowClosed(WindowEvent windowEvent) {
-            }
-
-            @Override
-            public void windowIconified(WindowEvent windowEvent) {
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent windowEvent) {
-            }
-
-            @Override
-            public void windowActivated(WindowEvent windowEvent) {
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent windowEvent) {
-            }
-        };
-    }
-
     private void diskImageSelectEventHandler() {
-        try {
             JFileChooser fileChooser = new JFileChooser(FilesHelper.getRealFolder(recentRomLocation));
             fileChooser.setDialogTitle(resourceBundle.getString("SelectDiskImageText"));
             fileChooser.setFileFilter(new IsoFileFilter());
             if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
                 setDiskImageFile(fileChooser.getSelectedFile());
+    }
+
+    public void setDiskImageFile(File imageFile){
+        try {
+            recentRomLocation = imageFile.getParent();
+            ISO9660 iso9660 = new ISO9660(imageFile);
+            publisherTitle = iso9660.getTitle();
+
+            diskImageNameLbl.setText(imageFile.getName());
+            convertBtn.setEnabled(true);
+            statusLbl.setText(imageFile.getAbsolutePath());
+
+            diskImage = imageFile;
+            setProposedTitle();
         } catch (Exception e) {
             statusLbl.setText(e.getMessage());
             e.printStackTrace();
         }
-    }
-
-    private void setDiskImageFile(File imageFile) throws Exception {
-        recentRomLocation = imageFile.getParent();
-        ISO9660 iso9660 = new ISO9660(imageFile);
-        publisherTitle = iso9660.getTitle();
-
-        diskImageNameLbl.setText(imageFile.getName());
-        convertBtn.setEnabled(true);
-        statusLbl.setText(imageFile.getAbsolutePath());
-
-        diskImage = imageFile;
-        setProposedTitle();
     }
 
     private void setProposedTitle() {
@@ -177,7 +148,6 @@ public class MainAppUi extends JFrame {
         JFileChooser fileChooser = new JFileChooser(FilesHelper.getRealFolder(destinationDirectoryLbl.getText()));
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setDialogTitle(resourceBundle.getString("SetDestinationDirectoryText"));
-        fileChooser.setFileFilter(new IsoFileFilter());
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
             setDestinationDir(fileChooser.getSelectedFile());
     }

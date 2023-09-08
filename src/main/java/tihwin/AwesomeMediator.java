@@ -20,6 +20,8 @@
  */
 package tihwin;
 
+import java.io.File;
+
 public class AwesomeMediator {
     private final static AwesomeMediator INSTANCE = new AwesomeMediator();
 
@@ -33,4 +35,6 @@ public class AwesomeMediator {
     public static void notifyAllConvertsEnded(){
         INSTANCE.mainAppUi.notifySplitFinished();
     }
+
+    public static void setDiskImage(File file){INSTANCE.mainAppUi.setDiskImageFile(file);}
 }

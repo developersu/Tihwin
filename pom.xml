@@ -8,7 +8,7 @@
     <name>Tihwin</name>
 
     <artifactId>Tihwin</artifactId>
-    <version>2.3</version>
+    <version>2.4</version>
 
     <url>https://github.com/developersu/${project.artifactId}/</url>
     <description>
@@ -160,8 +160,8 @@
                             </versionInfo>
                             <messages>
                                 <startupErr>Startup error</startupErr>
-                                <jreNotFoundErr>JDK not found</jreNotFoundErr>
-                                <jreVersionErr>JDK Version mismatch</jreVersionErr>
+                                <jreNotFoundErr>Please check your Java Runtime installation. JDK not found</jreNotFoundErr>
+                                <jreVersionErr>Please check your Java Runtime installation. JDK Version mismatch</jreVersionErr>
                                 <launcherErr>Launcher Error</launcherErr>
                             </messages>
                         </configuration>
