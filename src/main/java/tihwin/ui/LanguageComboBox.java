@@ -24,17 +24,21 @@ import tihwin.ui.model.LocaleHolder;
 import tihwin.ui.model.SettingsLanguagesSetup;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.util.List;
 
 public class LanguageComboBox extends JComboBox<LocaleHolder> {
     private static final Color COLOR_SKY_BLUE = new Color(114, 211, 253);
+    private final Color COLOR_DARK = new Color(71, 81, 93);
+    private final Border myBorder = new EmptyBorder(5, 10, 5, 10);
 
     public LanguageComboBox(){
         super();
-        UIManager.put("ComboBox.selectionForeground", COLOR_SKY_BLUE);
-        UIManager.put("ComboBox.selectionBackground", Color.white);
+        UIManager.put("ComboBox.selectionForeground", COLOR_DARK);
+        UIManager.put("ComboBox.selectionBackground", COLOR_SKY_BLUE);
         UIManager.put("ComboBox.squareButton", Boolean.FALSE);
 
         setUI(new BasicComboBoxUI(){
@@ -51,14 +55,17 @@ public class LanguageComboBox extends JComboBox<LocaleHolder> {
         ListCellRenderer<LocaleHolder> current = (ListCellRenderer<LocaleHolder>) getRenderer();
 
         setRenderer((list, localeHolder, index, isSelected, hasFocus) -> {
-            Component component = current.getListCellRendererComponent(list, localeHolder, index, isSelected, hasFocus);
+            JLabel component = (JLabel) current.getListCellRendererComponent(list, localeHolder, index, isSelected, hasFocus);
+
+            component.setHorizontalAlignment(SwingConstants.RIGHT);
+            component.setBorder(myBorder);
 
             if (isSelected) {
-                component.setForeground(Color.black);
+                component.setForeground(COLOR_DARK);
                 component.setBackground(Color.ORANGE);
             } else {
                 component.setForeground(Color.white);
-                component.setBackground(COLOR_SKY_BLUE);
+                component.setBackground(COLOR_DARK);
             }
             return component;
         });

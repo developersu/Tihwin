@@ -34,7 +34,7 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Image img = new ImageIcon(Objects.requireNonNull(MainAppUi.class.getClassLoader().getResource("tray_icon.gif"))).getImage();
         frame.setIconImage(img);
-        frame.setMinimumSize(new Dimension(700, 300));
+        frame.setMinimumSize(new Dimension(700, 350));
         //frame.setResizable(false);
         frame.setVisible(true);
     }

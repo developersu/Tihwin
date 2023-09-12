@@ -32,6 +32,7 @@ public class UiUpdater {
         this.progressBar = progressBar;
         this.statusLine = statusLine;
         progressBar.setMaximum(100);
+        progressBar.setStringPainted(true);
     }
 
     public synchronized void updateProgressBySize(int value){
@@ -49,6 +50,7 @@ public class UiUpdater {
 
     public void close(){
         progressBar.setValue(0);
+        progressBar.setStringPainted(false);
         AwesomeMediator.notifyAllConvertsEnded();
     }
 }
