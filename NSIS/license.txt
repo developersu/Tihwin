@@ -1,7 +1,7 @@
-1. OpenJDK distibuted under GNU General Public License, version 2,
+1. OpenJDK distributes under GNU General Public License, version 2,
 with the Classpath Exception
 
-2. NS-USBloader distibuted under GNU General Public License version 3, 
+2. Tihwin distributes under GNU General Public License version 3,
 or any later version.
                                ***
 The GNU General Public License (GPL)
