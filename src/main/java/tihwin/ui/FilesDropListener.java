@@ -46,8 +46,10 @@ public class FilesDropListener extends DropTargetAdapter {
             List<File> files = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
 
             for (File file : files) {
-                if (file.isDirectory())
-                    continue;
+                if (file.isDirectory()){
+                    AwesomeMediator.setDestination(file);
+                    break;
+                }
                 // Pick up first ISO file found and drop iteration
                 if (file.getName().toLowerCase().endsWith(".iso")) {
                     AwesomeMediator.setDiskImage(file);

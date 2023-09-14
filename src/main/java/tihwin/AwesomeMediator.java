@@ -1,6 +1,6 @@
 /*
 
-     Copyright "2022" Dmitry Isaenko
+     Copyright 2022-2023 Dmitry Isaenko
 
      This file is part of Tihwin.
 
@@ -36,5 +36,10 @@ public class AwesomeMediator {
         INSTANCE.mainAppUi.notifySplitFinished();
     }
 
-    public static void setDiskImage(File file){INSTANCE.mainAppUi.setDiskImageFile(file);}
+    public static void setDiskImage(File file){
+        INSTANCE.mainAppUi.setDiskImageFile(file);
+    }
+    public static void setDestination(File folder){
+        INSTANCE.mainAppUi.setDestinationDir(folder);
+    }
 }

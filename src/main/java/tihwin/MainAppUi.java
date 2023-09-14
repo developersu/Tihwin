@@ -1,5 +1,5 @@
 /*
-    Copyright 2022 Dmitry Isaenko
+    Copyright 2022-2023 Dmitry Isaenko
 
     This file is part of Tihwin.
 
@@ -152,7 +152,7 @@ public class MainAppUi extends JFrame {
             setDestinationDir(fileChooser.getSelectedFile());
     }
 
-    private void setDestinationDir(File folder) {
+    public void setDestinationDir(File folder) {
         destinationDirectoryLbl.setText(folder.getAbsolutePath());
     }
 
