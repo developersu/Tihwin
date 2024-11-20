@@ -68,7 +68,6 @@ public class MainAppUi extends JFrame {
     private Thread splitThread;
 
     public MainAppUi(String appName) {
-        super(appName);
         $$$setupUI$$$();
         resourceBundle = ResourceBundle.getBundle("locale");
         AwesomeMediator.setMainUi(this);
@@ -139,7 +138,7 @@ public class MainAppUi extends JFrame {
         String proposedName = diskImage.getName().replaceAll("(\\..*)|(\\[.*)", "").trim();
         if (proposedName.length() > 31)
             proposedName = proposedName.substring(0, 31);
-        if (proposedName.length() == 0)
+        if (proposedName.isEmpty())
             proposedName = "My favorite game";
         titleField.setText(proposedName);
     }
@@ -164,7 +163,7 @@ public class MainAppUi extends JFrame {
                 return;
             }
 
-            if (titleField.getText().length() == 0) {
+            if (titleField.getText().isEmpty()) {
                 setProposedTitle();
                 return;
             }

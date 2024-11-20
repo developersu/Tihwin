@@ -79,7 +79,7 @@
 Section "Tihwin" Install
 
   SetOutPath "$INSTDIR"
-  file /r jdk
+  file /r \assembly\jdk
   file Tihwin.exe
   file logo.ico
 

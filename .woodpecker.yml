@@ -1,7 +1,3 @@
-kind: pipeline
-type: docker
-name: default
-
 steps:
   - name: build
     image: maven:3-openjdk-17
@@ -9,9 +5,7 @@ steps:
       - mvn -B -DskipTests clean install
       - mvn test -B
     volumes:
-      - name: m2
-        path: /root/.m2
-
+      - /home/docker/woodpecker/files/m2:/root/.m2
   - name: archive-artifacts
     image: alpine:latest
     commands:
@@ -19,9 +13,7 @@ steps:
       - cp target/Tihwin-*[0-9].jar /builds/Tihwin/
       - cp target/Tihwin-*[0-9].exe /builds/Tihwin/
     volumes:
-      - name: builds
-        path: /builds
-
+      - /home/www/builds:/builds
   - name: make-win-installer
     image: wheatstalk/makensis:3
     commands:
@@ -31,18 +23,5 @@ steps:
       - makensis -V4 ./installer.nsi
       - cp Installer-*.exe /builds/Tihwin/
     volumes:
-      - name: builds
-        path: /builds
-      - name: jdk
-        path: /drone/src/NSIS/jdk
-
-volumes:
-  - name: m2
-    host:
-      path: /home/docker/drone/files/m2
-  - name: builds
-    host:
-      path: /home/www/builds
-  - name: jdk
-    host:
-      path: /home/docker/drone/files/assembly/openjdk-19.0.2
+      - /home/www/builds:/builds
+      - /home/docker/woodpecker/files/assembly/openjdk-19.0.2:/assembly/jdk

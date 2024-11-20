@@ -1,5 +1,5 @@
 ## Tihwin
-![License](https://img.shields.io/badge/License-GPLv3-blue.svg) ![LatestVer](https://img.shields.io/github/release/developersu/Tihwin.svg) [![Build Status](https://ci.redrise.ru/api/badges/desu/Tihwin/status.svg)](https://ci.redrise.ru/desu/Tihwin)
+![License](https://img.shields.io/badge/License-GPLv3-blue.svg) ![LatestVer](https://img.shields.io/github/release/developersu/Tihwin.svg) [![status-badge](https://ci.redrise.ru/api/badges/6/status.svg)](https://ci.redrise.ru/repos/6)
 
 #### 他の言語
 [![英語](flag/us-flag.svg)](README.md) 
