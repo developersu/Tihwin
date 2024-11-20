@@ -9,6 +9,8 @@ steps:
     volumes:
       - /home/docker/woodpecker/files/m2:/root/.m2
   - name: archive-artifacts
+    when:
+      event: [ tag, push ]
     image: alpine:latest
     commands:
       - mkdir -p /builds/Tihwin
