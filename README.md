@@ -5,7 +5,8 @@
 [![Russian](flag/ru-flag.svg)](README_RU.md) 
 [![Spanish](flag/es-flag.svg)](README_ES.md) 
 [![Japanese](flag/jp-flag.svg)](README_JP.md) 
-[![Ryukyuan](flag/jp-flag.svg)](README_RYU.md)(Ryukyuan) 
+[![Ryukyuan](flag/jp-flag.svg)](README_RYU.md)(Ryukyuan)
+[![Indonesia](flag/id-flag.svg)](README_ID.md) 
 
 OPL-compatible PS2 tool for making split files. Sort of ul.cfg manager or USBUtil. Good for use on mac and linux.
 
@@ -33,6 +34,7 @@ Create new GitHub issue with bug report or proposition
 * [DDinghoya](https://github.com/DDinghoya), who translated this application to Korean!
 * [Ignacio Grosso](https://github.com/blckbearx), who translated this application to Spanish!
 * [kuragehime](https://github.com/kuragehimekurara1), who translated this application to Japanese and Ryukyuan languages!
+* [rizkyghofur](https://github.com/rizkyghofur), who translated this application to Indonesian!
 
 #### Translations
 
