@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="tihwin.MainAppUi">
   <grid id="27dc6" binding="mainPanel" layout-manager="FormLayout">
     <rowspec value="center:max(d;4px):noGrow"/>
-    <rowspec value="top:m:grow"/>
+    <rowspec value="top:m:grow(1.1)"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
@@ -14,7 +14,7 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:max(d;1dlu):noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:p:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:p:noGrow"/>
@@ -23,9 +23,9 @@
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="fill:d:grow"/>
     <colspec value="left:4dlu:noGrow"/>
-    <colspec value="fill:p:noGrow"/>
+    <colspec value="fill:p:grow(0.2)"/>
     <constraints>
-      <xy x="0" y="0" width="763" height="488"/>
+      <xy x="0" y="0" width="1155" height="462"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -146,7 +146,7 @@
           <indeterminate value="false"/>
         </properties>
       </component>
-      <grid id="a5cce" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="a5cce" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="9" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -159,7 +159,7 @@
         <children>
           <component id="2c1c4" class="javax.swing.JLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <icon value="banner.png"/>
@@ -178,6 +178,47 @@
               <html.disable class="java.lang.Boolean" value="false"/>
             </clientProperties>
           </component>
+          <grid id="b11cc" layout-manager="FlowLayout" hgap="0" vgap="0" flow-align="2">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="5" fill="0" indent="2" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <alignmentX value="0.0"/>
+              <alignmentY value="0.0"/>
+              <focusable value="false"/>
+              <opaque value="false"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="825ab" class="javax.swing.JButton" binding="zoomInBtn">
+                <constraints/>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <contentAreaFilled value="false"/>
+                  <focusPainted value="true"/>
+                  <icon value="zoom-in.png"/>
+                  <iconTextGap value="0"/>
+                  <opaque value="false"/>
+                  <preferredSize width="25" height="25"/>
+                </properties>
+              </component>
+              <component id="c79b2" class="javax.swing.JButton" binding="zoomOutBtn">
+                <constraints/>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <contentAreaFilled value="false"/>
+                  <focusPainted value="true"/>
+                  <foreground color="-9251843"/>
+                  <icon value="zoom-out.png"/>
+                  <iconTextGap value="0"/>
+                  <opaque value="false"/>
+                  <preferredSize width="25" height="25"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
         </children>
       </grid>
       <component id="824ea" class="javax.swing.JButton" binding="ulCfgBtn">
@@ -187,14 +228,10 @@
         </constraints>
         <properties>
           <background color="-2031648"/>
-          <margin top="1" left="1" bottom="1" right="1"/>
-          <minimumSize width="130" height="30"/>
-          <preferredSize width="140" height="30"/>
           <text resource-bundle="locale" key="editUlCfgBtn"/>
         </properties>
       </component>
-      <grid id="8b0eb" binding="statusJPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="5" left="5" bottom="5" right="5"/>
+      <grid id="8b0eb" binding="statusJPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
         <constraints>
           <grid row="13" column="0" row-span="1" col-span="9" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms/>
@@ -207,9 +244,7 @@
         </border>
         <children>
           <component id="2cf16" class="javax.swing.JLabel" binding="statusLbl">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
+            <constraints/>
             <properties>
               <text resource-bundle="locale" key="WelcomeText"/>
             </properties>

@@ -1,5 +1,5 @@
 /*
-    Copyright 2022 Dmitry Isaenko
+    Copyright 2022-2025 Dmitry Isaenko
      
     This file is part of Tihwin.
 
@@ -55,4 +55,11 @@ public class Settings {
 
     public Locale getLocale(){ return this.locale; }
     public void setLocale(String localeId){ preferences.put("locale", localeId); }
+
+    public int getScaleFactor(){
+        return preferences.getInt("scale", 0);
+    }
+    public void setScaleFactor(int value){
+        preferences.putInt("scale", value);
+    }
 }
