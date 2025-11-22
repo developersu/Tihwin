@@ -45,36 +45,43 @@ public class ScaleUi {
     };
 
     public static void applyInitialScale(List<Component> components) {
-        if (AwesomeMediator.getScaleValue() == 0)
-            return;
-        for (Component component : components)
-            applyInitialScale(component);
-        applyOnDefaults(INIT);
+        applyOnAll(INIT, components);
     }
     public static void applyInitialScale(Component component) {
         applyOn(component, AwesomeMediator.getScaleValue());
     }
 
     public static void increaseScale(List<Component> components) {
-        for (Component component : components)
-            increaseScale(component);
-        applyOnDefaults(INCREASE);
-    }
-    private static void increaseScale(Component component) {
-        applyOn(component, +1);
+        applyOnAll(INCREASE, components);
     }
 
     public static void decreaseScale(List<Component> components) {
-        if (AwesomeMediator.getScaleValue() <= 0)
-            return;
-        for (Component component : components)
-            decreaseScale(component);
-        applyOnDefaults(DECREASE);
-    }
-    private static void decreaseScale(Component component) {
-        applyOn(component, -1);
+        applyOnAll(DECREASE, components);
     }
 
+    private static void applyOnAll(ScalePolicy policy, List<Component> components) {
+        switch (policy) {
+            case INIT:
+                if (AwesomeMediator.getScaleValue() == 0)
+                    return;
+                for (Component component : components)
+                    applyInitialScale(component);
+                applyOnDefaults(INIT);
+                break;
+            case INCREASE:
+                for (Component component : components)
+                    applyOn(component, +1);
+                applyOnDefaults(INCREASE);
+                break;
+            case DECREASE:
+                if (AwesomeMediator.getScaleValue() <= 0)
+                    return;
+                for (Component component : components)
+                    applyOn(component, -1);
+                applyOnDefaults(DECREASE);
+                break;
+        }
+    }
     private static void applyOn(Component component, int factor) {
         Font defaultFont = component.getFont();
         component.setFont(new Font(defaultFont.getName(), defaultFont.getStyle(), defaultFont.getSize() + factor));
@@ -84,36 +91,23 @@ public class ScaleUi {
         switch (policy){
             case INIT:
                 for (String defaultElement: DEFAULTS)
-                    initDefault(defaultElement);
+                    applyOnDefault(defaultElement, AwesomeMediator.getScaleValue());
                 break;
             case INCREASE:
                 for (String defaultElement: DEFAULTS)
-                    increaseDefault(defaultElement);
+                    applyOnDefault(defaultElement, +1);
                 AwesomeMediator.increaseScaleValue();
                 break;
             case DECREASE:
                 for (String defaultElement: DEFAULTS)
-                    decreaseDefault(defaultElement);
+                    applyOnDefault(defaultElement, -1);
                 AwesomeMediator.decreaseScaleValue();
                 break;
         }
     }
-
-    private static void initDefault(String name){
-        applyOnDefault(name, AwesomeMediator.getScaleValue());
-    }
-
-    private static void increaseDefault(String name){
-        applyOnDefault(name, +1);
-    }
-
-    private static void decreaseDefault(String name){
-        applyOnDefault(name, -1);
-    }
-
-    private static void applyOnDefault(String name, int factor){
-        Font defaultFont = UIManager.getDefaults().getFont(name);
-        UIManager.getDefaults().put(name, new Font(defaultFont.getName(), defaultFont.getStyle(),
+    private static void applyOnDefault(String componentName, int factor){
+        Font defaultFont = UIManager.getDefaults().getFont(componentName);
+        UIManager.getDefaults().put(componentName, new Font(defaultFont.getName(), defaultFont.getStyle(),
                 defaultFont.getSize()+factor));
     }
 }

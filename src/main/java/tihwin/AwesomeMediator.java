@@ -26,8 +26,10 @@ public class AwesomeMediator {
     private final static AwesomeMediator INSTANCE = new AwesomeMediator();
 
     private MainAppUi mainAppUi;
-    private static int scale = Settings.INSTANCE.getScaleFactor();
-    private AwesomeMediator(){}
+    private int scale;
+    private AwesomeMediator(){
+        this.scale = Settings.INSTANCE.getScaleFactor();
+    }
 
     public static void setMainUi(MainAppUi ui){
         INSTANCE.mainAppUi = ui;
@@ -45,13 +47,13 @@ public class AwesomeMediator {
     }
 
     public static int getScaleValue() {
-        return scale;
+        return INSTANCE.scale;
     }
 
     public static void increaseScaleValue() {
-        AwesomeMediator.scale++;
+        INSTANCE.scale++;
     }
     public static void decreaseScaleValue() {
-        AwesomeMediator.scale--;
+        INSTANCE.scale--;
     }
 }
