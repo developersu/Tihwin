@@ -1,6 +1,6 @@
 /*
 
-     Copyright "2022" Dmitry Isaenko
+     Copyright "2022-2025" Dmitry Isaenko
 
      This file is part of Tihwin.
 
@@ -20,6 +20,8 @@
  */
 package tihwin.ui.ulupdater;
 
+import tihwin.ScaleUi;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -34,6 +36,7 @@ public class UlTableContentJLabelRenderer extends DefaultTableCellRenderer {
         JLabel label = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         label.setBackground(Color.getHSBColor(0, 0, 0.9411765f));
         label.setBorder(new EmptyBorder(0, 3, 0, 3));
+        ScaleUi.applyInitialScale(label);
         switch (column){
             case 0:
             case 3:

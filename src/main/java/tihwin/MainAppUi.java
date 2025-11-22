@@ -33,12 +33,12 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainAppUi extends JFrame {
     private JPanel mainPanel;
@@ -61,7 +61,8 @@ public class MainAppUi extends JFrame {
     private JButton zoomInBtn;
     private JButton zoomOutBtn;
     private ResourceBundle resourceBundle;
-    int scale;
+
+    private List<Component> components;
 
     private String recentRomLocation;
     private File diskImage;
@@ -75,6 +76,21 @@ public class MainAppUi extends JFrame {
         $$$setupUI$$$();
         resourceBundle = ResourceBundle.getBundle("locale");
         AwesomeMediator.setMainUi(this);
+        mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, InputEvent.CTRL_DOWN_MASK), "zoomIn");
+        mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, InputEvent.CTRL_DOWN_MASK), "zoomOut");
+        Action zoom = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if ("+".equals(e.getActionCommand()))
+                    zoomIn();
+                else
+                    zoomOut();
+            }
+        };
+        mainPanel.getActionMap().put("zoomIn", zoom);
+        mainPanel.getActionMap().put("zoomOut", zoom);
         setLocationRelativeTo(null); // Set window on [kinda] center
         new FilesDropListener(mainPanel);
         setContentPane(mainPanel);
@@ -100,7 +116,7 @@ public class MainAppUi extends JFrame {
                 Settings.INSTANCE.setDestination(destinationDirectoryLbl.getText());
                 Settings.INSTANCE.setDvdSelected(DVDRadioButton.isSelected());
                 Settings.INSTANCE.setLocale(((LocaleHolder) ulLangComboBox.getSelectedItem()).getLocaleCode());
-                Settings.INSTANCE.setScaleFactor(scale);
+                Settings.INSTANCE.setScaleFactor(AwesomeMediator.getScaleValue());
             }
         });
 
@@ -114,51 +130,25 @@ public class MainAppUi extends JFrame {
         destinationSelectBtn.addMouseListener(new TwButtonsActionListener());
         titleField.setBorder(new LineBorder(Color.lightGray));
 
-        scale = Settings.INSTANCE.getScaleFactor();
         applyScaling();
     }
 
     private void applyScaling() {
-        if (scale == 0)
-            return;
+        components = Arrays.stream(mainPanel.getComponents()).collect(Collectors.toList());
+        components.add(statusLbl);
+        components.add(ulLangComboBox);
 
-        for (Component component : mainPanel.getComponents())
-            applyScalingOnComponent(component);
-        applyScalingOnComponent(statusLbl);
-        applyScalingOnComponent(ulLangComboBox);
-    }
-
-    private void applyScalingOnComponent(Component component) {
-        Font defaultFont = component.getFont();
-        component.setFont(new Font(defaultFont.getName(), defaultFont.getStyle(), defaultFont.getSize() + scale));
+        ScaleUi.applyInitialScale(components);
     }
 
     private void zoomIn() {
-        for (Component c : mainPanel.getComponents())
-            increaseElementScale(c);
-        increaseElementScale(statusLbl);
-        increaseElementScale(ulLangComboBox);
-        scale++;
-    }
-
-    private void increaseElementScale(Component component) {
-        Font defaultFont = component.getFont();
-        component.setFont(new Font(defaultFont.getName(), defaultFont.getStyle(), defaultFont.getSize() + 1));
+        ScaleUi.increaseScale(components);
+        pack();
     }
 
     private void zoomOut() {
-        if (scale == 0)
-            return;
-        for (Component c : mainPanel.getComponents())
-            decreaseElementScale(c);
-        decreaseElementScale(statusLbl);
-        decreaseElementScale(ulLangComboBox);
-        scale--;
-    }
-
-    private void decreaseElementScale(Component component) {
-        Font defaultFont = component.getFont();
-        component.setFont(new Font(defaultFont.getName(), defaultFont.getStyle(), defaultFont.getSize() - 1));
+        ScaleUi.decreaseScale(components);
+        pack();
     }
 
     private void diskImageSelectEventHandler() {
@@ -338,24 +328,24 @@ public class MainAppUi extends JFrame {
         progressBar.setIndeterminate(false);
         mainPanel.add(progressBar, cc.xyw(1, 12, 9, CellConstraints.FILL, CellConstraints.TOP));
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel1.setBackground(new Color(-9251843));
         mainPanel.add(panel1, cc.xyw(1, 1, 9));
         final JLabel label1 = new JLabel();
         label1.setIcon(new ImageIcon(getClass().getResource("/banner.png")));
         label1.setText("");
-        panel1.add(label1, new GridConstraints(0, 0, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         ulLangComboBox.setBackground(new Color(-9251843));
         ulLangComboBox.setForeground(new Color(-1));
         ulLangComboBox.putClientProperty("html.disable", Boolean.FALSE);
         panel1.add(ulLangComboBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        panel2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
         panel2.setAlignmentX(0.0f);
         panel2.setAlignmentY(0.0f);
         panel2.setFocusable(false);
         panel2.setOpaque(false);
-        panel1.add(panel2, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_NORTHEAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 2, false));
+        panel1.add(panel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         zoomInBtn = new JButton();
         zoomInBtn.setAlignmentY(0.0f);
         zoomInBtn.setBorderPainted(false);

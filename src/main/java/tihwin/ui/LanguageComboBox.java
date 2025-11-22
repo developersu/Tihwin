@@ -1,6 +1,6 @@
 /*
 
-     Copyright "2022" Dmitry Isaenko
+     Copyright "2022-2025" Dmitry Isaenko
 
      This file is part of Tihwin.
 
@@ -32,8 +32,8 @@ import java.util.List;
 
 public class LanguageComboBox extends JComboBox<LocaleHolder> {
     private static final Color COLOR_SKY_BLUE = new Color(114, 211, 253);
-    private final Color COLOR_DARK = new Color(71, 81, 93);
-    private final Border myBorder = new EmptyBorder(5, 10, 5, 10);
+    private static final Color COLOR_DARK = new Color(71, 81, 93);
+    private static final Border BORDER = new EmptyBorder(5, 10, 5, 10);
 
     public LanguageComboBox(){
         super();
@@ -58,7 +58,7 @@ public class LanguageComboBox extends JComboBox<LocaleHolder> {
             JLabel component = (JLabel) current.getListCellRendererComponent(list, localeHolder, index, isSelected, hasFocus);
 
             component.setHorizontalAlignment(SwingConstants.RIGHT);
-            component.setBorder(myBorder);
+            component.setBorder(BORDER);
 
             if (isSelected) {
                 component.setForeground(COLOR_DARK);

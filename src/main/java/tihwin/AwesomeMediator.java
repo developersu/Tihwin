@@ -26,6 +26,7 @@ public class AwesomeMediator {
     private final static AwesomeMediator INSTANCE = new AwesomeMediator();
 
     private MainAppUi mainAppUi;
+    private static int scale = Settings.INSTANCE.getScaleFactor();
     private AwesomeMediator(){}
 
     public static void setMainUi(MainAppUi ui){
@@ -41,5 +42,16 @@ public class AwesomeMediator {
     }
     public static void setDestination(File folder){
         INSTANCE.mainAppUi.setDestinationDir(folder);
+    }
+
+    public static int getScaleValue() {
+        return scale;
+    }
+
+    public static void increaseScaleValue() {
+        AwesomeMediator.scale++;
+    }
+    public static void decreaseScaleValue() {
+        AwesomeMediator.scale--;
     }
 }

@@ -1,6 +1,6 @@
 /*
 
-     Copyright "2022" Dmitry Isaenko
+     Copyright "2022-2025" Dmitry Isaenko
 
      This file is part of Tihwin.
 
@@ -38,27 +38,27 @@ public class UlTableColumnModel extends DefaultTableColumnModel {
 
         getColumn(0).setMinWidth(20);
         getColumn(0).setPreferredWidth(25);
-        getColumn(0).setMaxWidth(50);
+        //getColumn(0).setMaxWidth(50);
 
         getColumn(1).setMinWidth(200);
         getColumn(1).setPreferredWidth(230);
-        getColumn(1).setMaxWidth(300);
+        //getColumn(1).setMaxWidth(300);
 
         getColumn(2).setMinWidth(100);
         getColumn(2).setPreferredWidth(135);
-        getColumn(2).setMaxWidth(150);
+        //getColumn(2).setMaxWidth(150);
 
         getColumn(3).setMinWidth(75);
         getColumn(3).setPreferredWidth(100);
-        getColumn(3).setMaxWidth(125);
+        //getColumn(3).setMaxWidth(125);
 
         getColumn(4).setMinWidth(50);
         getColumn(4).setPreferredWidth(75);
-        getColumn(4).setMaxWidth(100);
+        //getColumn(4).setMaxWidth(100);
 
         getColumn(5).setMinWidth(100);
         getColumn(5).setPreferredWidth(135);
-        getColumn(5).setMaxWidth(150);
+        //getColumn(5).setMaxWidth(150);
 
         JTextField textField = new JTextField();
         ((AbstractDocument) textField.getDocument()).setDocumentFilter(new TitleFieldFilter());
@@ -69,7 +69,6 @@ public class UlTableColumnModel extends DefaultTableColumnModel {
         getColumn(5).setCellEditor(new UlButtonCellEditor());
 
         setColumnSelectionAllowed(false);
-
     }
 
     @Override

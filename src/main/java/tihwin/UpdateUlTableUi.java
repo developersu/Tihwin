@@ -1,6 +1,6 @@
 /*
 
-     Copyright "2022" Dmitry Isaenko
+     Copyright "2022-2025" Dmitry Isaenko
 
      This file is part of Tihwin.
 
@@ -40,6 +40,7 @@ public class UpdateUlTableUi extends JFrame {
     private JTable table;
     private UlTableModel model;
     private JButton saveChangesBtn;
+    private JButton selectUlBtn;
 
     private final JLabel ulLocationLbl;
     private JLabel statusLbl;
@@ -53,6 +54,7 @@ public class UpdateUlTableUi extends JFrame {
         this.recentRomLocation = ulDestinationLocation;
         setupTable();
         setupSaveButton();
+        createSelectUlLocationButton();
 
         FormLayout primaryPanelLayout = new FormLayout(
                 "80dlu, 2dlu, fill:pref:grow",
@@ -64,7 +66,7 @@ public class UpdateUlTableUi extends JFrame {
         primaryPanel.add(getScrollPane(), new CellConstraints(1, 1, 3, 1,
                 CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(0, 0, 0, 0)));
 
-        primaryPanel.add(getSelectUlLocationButton(), new CellConstraints(1, 2, 1, 1,
+        primaryPanel.add(selectUlBtn, new CellConstraints(1, 2, 1, 1,
                 CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(3, 3, 3, 3)));
 
         primaryPanel.add(ulLocationLbl, new CellConstraints(3, 2, 1, 1,
@@ -83,7 +85,8 @@ public class UpdateUlTableUi extends JFrame {
         Image img = new ImageIcon(Objects.requireNonNull(
                 MainAppUi.class.getClassLoader().getResource("tray_icon.gif"))).getImage();
         setIconImage(img);
-        setMinimumSize(new Dimension(800, 400));
+        int scaledWidth = (int) (800 * (AwesomeMediator.getScaleValue() / 20.0 + 1));
+        setMinimumSize(new Dimension(scaledWidth, 500));
         setVisible(true);
         setTitle(resourceBundle.getString("ulManager"));
 
@@ -119,11 +122,10 @@ public class UpdateUlTableUi extends JFrame {
         scrollPane.setPreferredSize(new Dimension(0,50));
         return scrollPane;
     }
-    private JButton getSelectUlLocationButton(){
-        JButton selectUlBtn = new JButton(resourceBundle.getString("ulManagerWindow_SelectUlCfgBtn"));
+    private void createSelectUlLocationButton(){
+        selectUlBtn = new JButton(resourceBundle.getString("ulManagerWindow_SelectUlCfgBtn"));
         selectUlBtn.setBackground(Color.getHSBColor(0.5591398f, 0.12156863f, 1));
         selectUlBtn.addActionListener(actionEvent -> selectUlCfgAction());
-        return selectUlBtn;
     }
     private JPanel getStatusPanel(){
         statusLbl = new JLabel();

@@ -1,6 +1,6 @@
 /*
 
-     Copyright "2022" Dmitry Isaenko
+     Copyright "2022-2025" Dmitry Isaenko
 
      This file is part of Tihwin.
 
@@ -20,6 +20,8 @@
  */
 package tihwin.ui.ulupdater;
 
+import tihwin.AwesomeMediator;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -29,11 +31,11 @@ public class UlTableHeaderRenderer extends DefaultTableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
-                                          boolean isSelected, boolean hasFocus,
-                                          int row, int column){
+                                                   boolean isSelected, boolean hasFocus,
+                                                   int row, int column){
         JLabel label = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         Font font = label.getFont();
-        label.setFont(new Font(font.getFontName(), Font.BOLD, font.getSize()));
+        label.setFont(new Font(font.getFontName(), Font.BOLD, font.getSize()+ AwesomeMediator.getScaleValue()));
         label.setBorder(new LineBorder(Color.darkGray));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setBackground(Color.getHSBColor(0.33333334f, 0.12765957f, 0.92156863f));

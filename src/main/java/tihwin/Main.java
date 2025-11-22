@@ -1,5 +1,5 @@
 /*
-    Copyright 2022 Dmitry Isaenko
+    Copyright 2022-2025 Dmitry Isaenko
 
     This file is part of Tihwin.
 
@@ -32,10 +32,10 @@ public class Main {
 
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Image img = new ImageIcon(Objects.requireNonNull(MainAppUi.class.getClassLoader().getResource("tray_icon.gif"))).getImage();
+        Image img = new ImageIcon(Objects.requireNonNull(
+                MainAppUi.class.getClassLoader().getResource("tray_icon.gif"))).getImage();
         frame.setIconImage(img);
         frame.setMinimumSize(new Dimension(700, 350));
-        //frame.setResizable(false);
         frame.setVisible(true);
     }
 }

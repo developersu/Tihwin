@@ -23,12 +23,7 @@ package tihwin.ui.ulupdater;
 import javax.swing.*;
 
 public class UlCdDvdCellEditor extends DefaultCellEditor {
-    static {
-        CD_DVD = new String[]{"CD", "DVD"};
-    }
-    private static final String[] CD_DVD;
-
     public UlCdDvdCellEditor(){
-        super(new JComboBox<>(CD_DVD));
+        super(new JComboBox<>(new String[]{"CD", "DVD"}));
     }
 }
