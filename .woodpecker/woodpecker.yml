@@ -1,33 +1,41 @@
 steps:
   - name: build
     when:
-      event: [ tag, push ]
+      event: [ tag, push, manual]
     image: maven:3-openjdk-17
     commands:
-      - mvn -B -DskipTests clean install
+      - mvn -B -DskipTests clean package
       - mvn test -B
+      - mkdir artifacts
+      - cp target/Tihwin-*[0-9].jar artifacts
+      - cp target/Tihwin-*[0-9].exe artifacts
     volumes:
       - /home/docker/woodpecker/files/m2:/root/.m2
-  - name: archive-artifacts
-    when:
-      event: [ tag, push ]
-    image: alpine:latest
-    commands:
-      - mkdir -p /builds/Tihwin
-      - cp target/Tihwin-*[0-9].jar /builds/Tihwin/
-      - cp target/Tihwin-*[0-9].exe /builds/Tihwin/
-    volumes:
-      - /home/www/builds:/builds
+
   - name: make-win-installer
     when:
-      event: [ tag, push ]
+      event: [ tag, push, manual]
     image: wheatstalk/makensis:3
     commands:
       - cp target/Tihwin-*.exe NSIS/Tihwin.exe
       - NSIS/update_version.sh
       - cd NSIS
       - makensis -V4 ./installer.nsi
-      - cp Installer-*.exe /builds/Tihwin/
+      - echo Installer-*.exe
+      - cp Installer-*.exe "../artifacts"
+      - cd ..
     volumes:
       - /home/www/builds:/builds
       - /home/docker/woodpecker/files/assembly/openjdk-19.0.2:/assembly/jdk
+
+  - name: save-artifacts
+    when:
+      event: [ tag, push ]
+    image: alpine:latest
+    commands:
+      - export ARTIFACTS_DIR="$(date -d @$CI_PIPELINE_CREATED +'%Y-%m-%d %H:%m %Z')"
+      - echo $ARTIFACTS_DIR
+      - mkdir -p /builds/Tihwin/
+      - mv artifacts "/builds/Tihwin/$ARTIFACTS_DIR"
+    volumes:
+      - /home/www/builds:/builds

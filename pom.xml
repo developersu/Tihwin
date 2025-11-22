@@ -62,7 +62,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}-${maven.build.timestamp}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -134,8 +134,8 @@
                         <configuration>
                             <headerType>gui</headerType>
                             <icon>tw_icon.ico</icon>
-                            <outfile>target/${project.name}-${project.version}-${maven.build.timestamp}.exe</outfile>
-                            <jar>target/${project.artifactId}-${project.version}-${maven.build.timestamp}.jar</jar>
+                            <outfile>target/${project.name}-${project.version}.exe</outfile>
+                            <jar>target/${project.artifactId}-${project.version}.jar</jar>
                             <errTitle>${project.name} launching error</errTitle>
                             <classPath>
                                 <mainClass>tihwin.Main</mainClass>
