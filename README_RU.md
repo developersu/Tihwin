@@ -34,6 +34,7 @@ GNU GLPv3 или выше. Ознакомьтесь с файлом LICENSE.
 * [Ignacio Grosso](https://github.com/blckbearx) на Испанский!
 * [kuragehime](https://github.com/kuragehimekurara1) на Японский и языки Рюкю!
 * [rizkyghofur](https://github.com/rizkyghofur) на Индонезийский!
+* [Mateus](https://github.com/mateus0sh), на португальский язык Бразилии!
 
 #### Переводы
 
