@@ -72,12 +72,14 @@
 	!insertmacro MUI_LANGUAGE "Japanese"
 	!insertmacro MUI_LANGUAGE "SpanishInternational"
 	!insertmacro MUI_LANGUAGE "Indonesian"
+	!insertmacro MUI_LANGUAGE "PortugueseBR"
 
 ;Language strings
   LangString l10n_CreateShortcut ${LANG_ENGLISH} "Create Desktop Shortcut"
   LangString l10n_CreateShortcut ${LANG_RUSSIAN} "Создать ярлык на Рабочем столе"
   LangString l10n_CreateShortcut ${LANG_JAPANESE} "デスクトップにショートカットを作成する"
   LangString l10n_CreateShortcut ${LANG_SPANISHINTERNATIONAL} "Crear un acceso directo en el escritorio"
+  LangString l10n_CreateShortcut ${LANG_PORTUGUESEBR} "Criar Atalho no Desktop"
 
   BrandingText "Tihwin"
 ;--------------------------------
