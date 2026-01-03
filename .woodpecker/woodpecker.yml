@@ -33,7 +33,7 @@ steps:
       event: [ tag, push ]
     image: alpine:latest
     commands:
-      - export ARTIFACTS_DIR="$(date -d @$CI_PIPELINE_CREATED +'%Y-%m-%d %H:%m %Z')"
+      - export ARTIFACTS_DIR="$(date -d @$CI_PIPELINE_CREATED +'%Y-%m-%d %H:%M %Z')"
       - echo $ARTIFACTS_DIR
       - mkdir -p /builds/Tihwin/
       - mv artifacts "/builds/Tihwin/$ARTIFACTS_DIR"
