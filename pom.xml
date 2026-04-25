@@ -168,6 +168,28 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--
+              Regenerates README.md plus README.es.md / README.id.md / README.ja.md /
+              README.ru.md / README.ryu.md from a single README.src.md template
+              on every build. See https://github.com/nanolaba/readme-generator
+            -->
+            <plugin>
+                <groupId>com.nanolaba</groupId>
+                <artifactId>nrg-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>create-files</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>README.src.md</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
