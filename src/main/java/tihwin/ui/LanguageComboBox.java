@@ -64,12 +64,12 @@ public class LanguageComboBox extends JComboBox<LocaleHolder> {
                 component.setForeground(COLOR_DARK);
                 component.setBackground(Color.ORANGE);
             } else {
-                component.setForeground(Color.white);
+                component.setForeground(Color.WHITE);
                 component.setBackground(COLOR_DARK);
             }
             return component;
         });
-        setForeground(Color.white);
+        setForeground(Color.WHITE);
         setBackground(COLOR_SKY_BLUE);
         SettingsLanguagesSetup setup = new SettingsLanguagesSetup();
 

@@ -1,6 +1,6 @@
 /*
 
-     Copyright "2022-2025" Dmitry Isaenko
+     Copyright "2022-2026" Dmitry Isaenko
 
      This file is part of Tihwin.
 
@@ -20,8 +20,6 @@
  */
 package tihwin;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import tihwin.ui.ulupdater.*;
 import tihwin.ul.UlConfiguration;
 import tihwin.ul.UlServiceTools;
@@ -36,6 +34,8 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.List;
 
+import static java.util.ResourceBundle.getBundle;
+
 public class UpdateUlTableUi extends JFrame {
     private JTable table;
     private UlTableModel model;
@@ -49,34 +49,54 @@ public class UpdateUlTableUi extends JFrame {
 
     public UpdateUlTableUi(String ulDestinationLocation) {
         super();
-        this.resourceBundle = ResourceBundle.getBundle("locale");
+        this.resourceBundle = getBundle("locale");
         this.ulLocationLbl = new JLabel(ulDestinationLocation);
         this.recentRomLocation = ulDestinationLocation;
         setupTable();
         setupSaveButton();
         createSelectUlLocationButton();
 
-        FormLayout primaryPanelLayout = new FormLayout(
-                "80dlu, 2dlu, fill:pref:grow",
-                "fill:pref:grow, 25dlu:noGrow, 25dlu:noGrow, fill:pref:noGrow"
-        );
-        JPanel primaryPanel = new JPanel();
-        primaryPanel.setLayout(primaryPanelLayout);
+        JPanel primaryPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        primaryPanel.add(getScrollPane(), new CellConstraints(1, 1, 3, 1,
-                CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(0, 0, 0, 0)));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        primaryPanel.add(getScrollPane(), gbc);
 
-        primaryPanel.add(selectUlBtn, new CellConstraints(1, 2, 1, 1,
-                CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(3, 3, 3, 3)));
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(3, 3, 3, 3);
+        primaryPanel.add(selectUlBtn, gbc);
 
-        primaryPanel.add(ulLocationLbl, new CellConstraints(3, 2, 1, 1,
-                CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(0, 0, 0, 0)));
+        gbc.gridx = 1;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 3, 3, 3);
+        primaryPanel.add(ulLocationLbl, gbc);
 
-        primaryPanel.add(saveChangesBtn, new CellConstraints(1, 3, 3, 1,
-                CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(3, 3, 3, 3)));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(3, 3, 3, 3);
+        primaryPanel.add(saveChangesBtn, gbc);
 
-        primaryPanel.add(getStatusPanel(), new CellConstraints(1, 4, 3, 1,
-                CellConstraints.DEFAULT, CellConstraints.DEFAULT, new Insets(0, 0, 0, 0)));
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        primaryPanel.add(getStatusPanel(), gbc);
 
         setLocationRelativeTo(null);
         setContentPane(primaryPanel);
@@ -95,13 +115,14 @@ public class UpdateUlTableUi extends JFrame {
             showInTableUlCfgFile(ulCfgFile);
     }
 
-    private void setupSaveButton(){
+    private void setupSaveButton() {
         saveChangesBtn = new JButton(resourceBundle.getString("ulManagerWindow_SaveBtn"));
         saveChangesBtn.setBackground(Color.getHSBColor(0.5591398f, 0.12156863f, 1));
         saveChangesBtn.addActionListener(actionEvent -> saveChangesAction());
         saveChangesBtn.setEnabled(false);
     }
-    private void setupTable(){
+
+    private void setupTable() {
         model = new UlTableModel();
         table = new JTable(model);
 
@@ -117,29 +138,32 @@ public class UpdateUlTableUi extends JFrame {
         table.setColumnModel(columnModel);
         table.setRowSelectionAllowed(false);
     }
-    private JScrollPane getScrollPane(){
+
+    private JScrollPane getScrollPane() {
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setPreferredSize(new Dimension(0,50));
+        scrollPane.setPreferredSize(new Dimension(0, 50));
         return scrollPane;
     }
-    private void createSelectUlLocationButton(){
+
+    private void createSelectUlLocationButton() {
         selectUlBtn = new JButton(resourceBundle.getString("ulManagerWindow_SelectUlCfgBtn"));
         selectUlBtn.setBackground(Color.getHSBColor(0.5591398f, 0.12156863f, 1));
         selectUlBtn.addActionListener(actionEvent -> selectUlCfgAction());
     }
-    private JPanel getStatusPanel(){
-        statusLbl = new JLabel();
+
+    private JPanel getStatusPanel() {
+        statusLbl = new JLabel("=)");
         JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         statusPanel.setBackground(Color.white);
-        statusPanel.setBorder(new MatteBorder(1,0,0,0, Color.darkGray));
+        statusPanel.setBorder(new MatteBorder(1, 0, 0, 0, Color.darkGray));
         statusPanel.add(statusLbl);
         return statusPanel;
     }
 
-    private void showInTableUlCfgFile(File ulCfgFile){
-        try{
-            if (ulCfgFile.length() < 64){
-                statusLbl.setText(resourceBundle.getString("ulManagerWindow_EmptyOrIncorrectText")+" "+ulCfgFile.getAbsolutePath());
+    private void showInTableUlCfgFile(File ulCfgFile) {
+        try {
+            if (ulCfgFile.length() < 64) {
+                statusLbl.setText(resourceBundle.getString("ulManagerWindow_EmptyOrIncorrectText") + " " + ulCfgFile.getAbsolutePath());
                 return;
             }
 
@@ -147,7 +171,7 @@ public class UpdateUlTableUi extends JFrame {
 
             String ulCfgFileLocation = ulCfgFile.getParentFile().getAbsolutePath();
 
-            for (int i = 0; i < ulCfgFile.length()/64; i++) {
+            for (int i = 0; i < ulCfgFile.length() / 64; i++) {
                 UlConfiguration ulConfiguration = new UlConfiguration(ulCfgFile, i);
                 boolean isConsistent = UlServiceTools.verifyChunksCount(ulCfgFileLocation, ulConfiguration);
                 model.addRow(new UlTableModelRecord(ulConfiguration, isConsistent));
@@ -157,20 +181,20 @@ public class UpdateUlTableUi extends JFrame {
             ulLocationLbl.setText(ulCfgFile.getParentFile().getAbsolutePath());
             statusLbl.setText(ulCfgFile.getAbsolutePath());
         }
-        catch (Exception e){
-            statusLbl.setText(resourceBundle.getString("ulManagerWindow_EmptyOrIncorrectText")+" "+e.getMessage());
+        catch (Exception e) {
+            statusLbl.setText(resourceBundle.getString("ulManagerWindow_EmptyOrIncorrectText") + " " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void saveChangesAction(){
-        try{
+    private void saveChangesAction() {
+        try {
             String ulLocation = ulLocationLbl.getText();
-            
+
             List<UlTableModelRecord> modelRecords = model.getInitialRows();
             List<UlConfiguration> finalConfigurationSet = new ArrayList<>();
             // Collect what we'll have in the final ul.cfg file
-            for (int i = 0; i < modelRecords.size(); i++){
+            for (int i = 0; i < modelRecords.size(); i++) {
                 UlConfiguration configuration = new UlConfiguration(
                         model.getTitle(i),
                         model.getPublisherTitle(i),
@@ -180,10 +204,10 @@ public class UpdateUlTableUi extends JFrame {
                 finalConfigurationSet.add(configuration);
             }
             // Updating chunk file names if needed
-            for (int i = 0; i < modelRecords.size(); i++){
+            for (int i = 0; i < modelRecords.size(); i++) {
                 UlTableModelRecord initialRecord = modelRecords.get(i);
                 String initialRecordTitle = initialRecord.getConfiguration().getTitle();
-                if (initialRecord.isConsistent() && ! model.getTitle(i).equals(initialRecordTitle)){
+                if (initialRecord.isConsistent() && !model.getTitle(i).equals(initialRecordTitle)) {
                     UlServiceTools.renameChunks(ulLocation,
                             initialRecord.getConfiguration(),
                             finalConfigurationSet.get(i));
@@ -196,7 +220,7 @@ public class UpdateUlTableUi extends JFrame {
             }
             // Write new ul.cfg
             UlServiceTools.writeUlCfgFile(ulLocation, finalConfigurationSet);
-            File ulCfgFile = new File(ulLocation+File.separator+"ul.cfg");
+            File ulCfgFile = new File(ulLocation + File.separator + "ul.cfg");
             if (ulCfgFile.length() == 0) {
                 Files.deleteIfExists(ulCfgFile.toPath());
                 saveChangesBtn.setEnabled(false);
@@ -207,13 +231,13 @@ public class UpdateUlTableUi extends JFrame {
 
             statusLbl.setText(resourceBundle.getString("SuccessText"));
         }
-        catch (Exception e){
-            statusLbl.setText(resourceBundle.getString("ulManagerWindow_SaveChangesFailureText")+" "+e.getMessage());
+        catch (Exception e) {
+            statusLbl.setText(resourceBundle.getString("ulManagerWindow_SaveChangesFailureText") + " " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void selectUlCfgAction(){
+    private void selectUlCfgAction() {
         try {
             JFileChooser fileChooser = new JFileChooser(FilesHelper.getRealFolder(recentRomLocation));
             fileChooser.setDialogTitle(resourceBundle.getString("ulManagerWindow_SelectUlCfgBtn"));
@@ -223,7 +247,8 @@ public class UpdateUlTableUi extends JFrame {
                 recentRomLocation = file.getParent();
                 showInTableUlCfgFile(file);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             statusLbl.setText(e.getMessage());
             e.printStackTrace();
         }

@@ -1,6 +1,6 @@
 /*
 
-     Copyright "2022" Dmitry Isaenko
+     Copyright 2022-2026 Dmitry Isaenko
 
      This file is part of Tihwin.
 
@@ -154,7 +154,7 @@ public class UlMaker implements Runnable{
             chunkFiles.add(chunkFile);
         }
 
-        if (chunkFiles.size() == 0)
+        if (chunkFiles.isEmpty())
             throw new Exception(resourceBundle.getString("UnableCheckResultsText"));
 
         long totalChunksSize = 0;

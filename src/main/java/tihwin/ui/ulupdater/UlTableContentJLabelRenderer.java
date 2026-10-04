@@ -1,6 +1,6 @@
 /*
 
-     Copyright "2022-2025" Dmitry Isaenko
+     Copyright "2022-2026" Dmitry Isaenko
 
      This file is part of Tihwin.
 
@@ -46,6 +46,11 @@ public class UlTableContentJLabelRenderer extends DefaultTableCellRenderer {
             case 2:
                 label.setHorizontalAlignment(SwingConstants.LEFT);
                 label.setOpaque(true);
+                break;
+            case 6:
+                label.setHorizontalAlignment(SwingConstants.LEFT);
+                label.setOpaque(false);
+                label.setToolTipText(value != null ? value.toString() : null);
                 break;
             default:
                 label.setHorizontalAlignment(SwingConstants.LEFT);

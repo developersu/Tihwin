@@ -8,7 +8,7 @@
     <name>Tihwin</name>
 
     <artifactId>Tihwin</artifactId>
-    <version>2.6</version>
+    <version>2.7</version>
 
     <url>https://github.com/developersu/${project.artifactId}/</url>
     <description>
@@ -51,15 +51,6 @@
         <system>GitHub</system>
         <url>https://github.com/developer_su/${project.artifactId}/issues</url>
     </issueManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.intellij</groupId>
-            <artifactId>forms_rt</artifactId>
-            <version>7.0.3</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
