@@ -1,6 +1,6 @@
 /*
 
-     Copyright "2022-2026" Dmitry Isaenko
+     Copyright 2022-2026 Dmitry Isaenko
 
      This file is part of Tihwin.
 
@@ -105,7 +105,7 @@ public class UpdateUlTableUi extends JFrame {
         Image img = new ImageIcon(Objects.requireNonNull(
                 MainAppUi.class.getClassLoader().getResource("tray_icon.gif"))).getImage();
         setIconImage(img);
-        int scaledWidth = (int) (800 * (AwesomeMediator.getScaleValue() / 20.0 + 1));
+        int scaledWidth = (int) (800 * (Settings.INSTANCE.getScaleFactor() / 20.0 + 1));
         setMinimumSize(new Dimension(scaledWidth, 500));
         setVisible(true);
         setTitle(resourceBundle.getString("ulManager"));

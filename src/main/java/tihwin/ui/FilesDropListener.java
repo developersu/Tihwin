@@ -1,5 +1,5 @@
 /*
-    Copyright 2023 Dmitry Isaenko
+    Copyright 2023-2026 Dmitry Isaenko
 
     This file is part of Tihwin.
 
@@ -18,7 +18,7 @@
  */
 package tihwin.ui;
 
-import tihwin.AwesomeMediator;
+import tihwin.MainAppUi;
 import tihwin.UpdateUlTableUi;
 
 import javax.swing.*;
@@ -29,13 +29,16 @@ import java.io.File;
 import java.util.List;
 
 public class FilesDropListener extends DropTargetAdapter {
-    public FilesDropListener(JPanel panel){
+    private final MainAppUi mainAppUi;
+
+    public FilesDropListener(JPanel panel, MainAppUi mainAppUi) {
+        this.mainAppUi = mainAppUi;
         new DropTarget(panel, DnDConstants.ACTION_COPY, this, true, null);
     }
 
     @Override
     public void drop(DropTargetDropEvent event) {
-        if (! event.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+        if (!event.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
             event.rejectDrop();
             return;
         }
@@ -46,22 +49,23 @@ public class FilesDropListener extends DropTargetAdapter {
             List<File> files = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
 
             for (File file : files) {
-                if (file.isDirectory()){
-                    AwesomeMediator.setDestination(file);
+                if (file.isDirectory()) {
+                    mainAppUi.setDestinationDir(file);
                     break;
                 }
                 // Pick up first ISO file found and drop iteration
                 if (file.getName().toLowerCase().endsWith(".iso")) {
-                    AwesomeMediator.setDiskImage(file);
+                    mainAppUi.setDiskImageFile(file);
                     break;
                 }
                 // If no ISO maybe there are ul.cfg than
-                if (file.isFile() && file.getName().equalsIgnoreCase("ul.cfg")){
+                if (file.isFile() && file.getName().equalsIgnoreCase("ul.cfg")) {
                     new UpdateUlTableUi(file.getParentFile().getAbsolutePath());
                     break;
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             event.rejectDrop();
         }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2022 Dmitry Isaenko
+    Copyright 2022-2026 Dmitry Isaenko
      
     This file is part of Tihwin.
 
@@ -18,39 +18,39 @@
  */
 package tihwin.ui;
 
-import tihwin.AwesomeMediator;
-
 import javax.swing.*;
 
 public class UiUpdater {
     private final JProgressBar progressBar;
     private final JLabel statusLine;
+    private final Runnable onFinished;
     private volatile float totalFilesSizeInBytes;
     private volatile long bytesDone;
 
-    public UiUpdater(JProgressBar progressBar, JLabel statusLine){
+    public UiUpdater(JProgressBar progressBar, JLabel statusLine, Runnable onFinished) {
         this.progressBar = progressBar;
         this.statusLine = statusLine;
+        this.onFinished = onFinished;
         progressBar.setMaximum(100);
         progressBar.setStringPainted(true);
     }
 
-    public synchronized void updateProgressBySize(int value){
+    public synchronized void updateProgressBySize(int value) {
         bytesDone += value;
         progressBar.setValue((int) (bytesDone / totalFilesSizeInBytes * 100));
     }
 
-    public void setStatus(String status){
+    public void setStatus(String status) {
         statusLine.setText(status);
     }
 
-    public synchronized void incrementProgressBar(long fileSize){
+    public synchronized void incrementProgressBar(long fileSize) {
         this.totalFilesSizeInBytes += fileSize;
     }
 
-    public void close(){
+    public void close() {
         progressBar.setValue(0);
         progressBar.setStringPainted(false);
-        AwesomeMediator.notifyAllConvertsEnded();
+        onFinished.run();
     }
 }

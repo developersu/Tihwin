@@ -1,5 +1,5 @@
 /*
-    Copyright 2025 Dmitry Isaenko
+    Copyright 2025-2026 Dmitry Isaenko
      
     This file is part of Tihwin.
 
@@ -48,7 +48,7 @@ public class ScaleUi {
         applyOnAll(INIT, components);
     }
     public static void applyInitialScale(Component component) {
-        applyOn(component, AwesomeMediator.getScaleValue());
+        applyOn(component, Settings.INSTANCE.getScaleFactor());
     }
 
     public static void increaseScale(List<Component> components) {
@@ -62,7 +62,7 @@ public class ScaleUi {
     private static void applyOnAll(ScalePolicy policy, List<Component> components) {
         switch (policy) {
             case INIT:
-                if (AwesomeMediator.getScaleValue() == 0)
+                if (Settings.INSTANCE.getScaleFactor() == 0)
                     return;
                 for (Component component : components)
                     applyInitialScale(component);
@@ -74,7 +74,7 @@ public class ScaleUi {
                 applyOnDefaults(INCREASE);
                 break;
             case DECREASE:
-                if (AwesomeMediator.getScaleValue() <= 0)
+                if (Settings.INSTANCE.getScaleFactor() <= 0)
                     return;
                 for (Component component : components)
                     applyOn(component, -1);
@@ -91,17 +91,17 @@ public class ScaleUi {
         switch (policy){
             case INIT:
                 for (String defaultElement: DEFAULTS)
-                    applyOnDefault(defaultElement, AwesomeMediator.getScaleValue());
+                    applyOnDefault(defaultElement, Settings.INSTANCE.getScaleFactor());
                 break;
             case INCREASE:
                 for (String defaultElement: DEFAULTS)
                     applyOnDefault(defaultElement, +1);
-                AwesomeMediator.increaseScaleValue();
+                Settings.INSTANCE.setScaleFactor(Settings.INSTANCE.getScaleFactor() + 1);
                 break;
             case DECREASE:
                 for (String defaultElement: DEFAULTS)
                     applyOnDefault(defaultElement, -1);
-                AwesomeMediator.decreaseScaleValue();
+                Settings.INSTANCE.setScaleFactor(Settings.INSTANCE.getScaleFactor() - 1);
                 break;
         }
     }

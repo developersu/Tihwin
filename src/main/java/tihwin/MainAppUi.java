@@ -18,11 +18,8 @@
  */
 package tihwin;
 
-import tihwin.cd.ISO9660;
 import tihwin.ui.*;
 import tihwin.ui.model.LocaleHolder;
-import tihwin.ul.UlConfiguration;
-import tihwin.ul.UlMaker;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -31,112 +28,79 @@ import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.*;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
-import static java.awt.GridBagConstraints.*;
 import static java.util.Objects.requireNonNull;
 import static java.util.ResourceBundle.getBundle;
 
 public class MainAppUi extends JFrame {
 
-    private static final Color COLOR_SKY_BLUE = new Color(114, 211, 253);
-    private static final Color SELECT_BTN_BG = new Color(224, 244, 255);
-    private static final Color UL_CFG_BTN_BG = new Color(224, 255, 224);
-    private static final Color PROGRESS_COLOR = new Color(255, 153, 0);
-    private static final int GRID_COLS = 9;
+    private final MainUiBuilder.Parts ui;
+    private final ConversionController conversion;
 
-    private static final long MAX_ISO_LENGTH = 0x40000000;
+    private final Texts texts;
 
-    private ResourceBundle resourceBundle;
-
-    private JPanel mainPanel;
-    private JButton diskImageSelectBtn;
-    private JButton destinationSelectBtn;
-    private JButton convertBtn;
-    private JButton ulCfgBtn;
-    private JButton zoomInBtn;
-    private JButton zoomOutBtn;
-    private JLabel diskImageNameLbl;
-    private JLabel diskImageRoLbl;
-    private JLabel titleRoLbl;
-    private JLabel ulDestinationRoLbl;
-    private JLabel destinationDirLbl;
-    private JLabel statusLbl;
-    private JTextField titleField;
-    private JRadioButton CDRadioButton;
-    private JRadioButton DVDRadioButton;
-    private JProgressBar progressBar;
-    private JPanel statusJPanel;
-    private JComboBox<LocaleHolder> ulLangComboBox;
-
-    private List<Component> components;
     private String recentRomLocation;
-    private File diskImage;
-    private String publisherTitle;
-    private boolean isConvertingNow = false;
-    private Thread splitThread;
 
     public MainAppUi(String appName) {
         super(appName);
-        resourceBundle = getBundle("locale");
-        setupUi();
+        this.texts = new Texts();
+        this.ui = MainUiBuilder.build(texts::text);
+        this.conversion = new ConversionController(new UiPort());
+
         configureComponents();
         setupKeyboardShortcuts();
-        AwesomeMediator.setMainUi(this);
         setLocationRelativeTo(null);
-        new FilesDropListener(mainPanel);
-        setContentPane(mainPanel);
-        applyScaling();
-    }
-
-    private String msg(String key) {
-        return resourceBundle.getString(key);
+        new FilesDropListener(ui.mainPanel, this);
+        setContentPane(ui.mainPanel);
+        ScaleUi.applyInitialScale(ui.scalableComponents);
     }
 
     private void configureComponents() {
         Border selectBtnBorder = BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.gray),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        diskImageSelectBtn.setBorder(selectBtnBorder);
-        destinationSelectBtn.setBorder(selectBtnBorder);
-        ulCfgBtn.setBorder(selectBtnBorder);
-        diskImageSelectBtn.addMouseListener(new TwButtonsActionListener());
-        destinationSelectBtn.addMouseListener(new TwButtonsActionListener());
-        titleField.setBorder(new LineBorder(Color.lightGray));
-        statusJPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.darkGray));
+        ui.diskImageSelectBtn.setBorder(selectBtnBorder);
+        ui.destinationSelectBtn.setBorder(selectBtnBorder);
+        ui.ulCfgBtn.setBorder(selectBtnBorder);
+        ui.diskImageSelectBtn.addMouseListener(new TwButtonsActionListener());
+        ui.destinationSelectBtn.addMouseListener(new TwButtonsActionListener());
+        ui.titleField.setBorder(new LineBorder(Color.lightGray));
+        ui.statusJPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.darkGray));
 
-        convertBtn.setEnabled(false);
-        diskImageSelectBtn.addActionListener(e -> diskImageSelectEventHandler());
-        destinationSelectBtn.addActionListener(e -> destinationSelectEventHandler());
-        convertBtn.addActionListener(e -> convertButtonAction());
-        ulCfgBtn.addActionListener(e -> ulConfigButtonAction());
-        zoomInBtn.addActionListener(e -> zoomIn());
-        zoomOutBtn.addActionListener(e -> zoomOut());
-        ((AbstractDocument) titleField.getDocument()).setDocumentFilter(new TitleFieldFilter());
+        ui.convertBtn.setEnabled(false);
+        ui.diskImageSelectBtn.addActionListener(e -> diskImageSelectEventHandler());
+        ui.destinationSelectBtn.addActionListener(e -> destinationSelectEventHandler());
+        ui.convertBtn.addActionListener(e -> conversion.onConvertClicked());
+        ui.ulCfgBtn.addActionListener(e -> ulConfigButtonAction());
+        ui.zoomInBtn.addActionListener(e -> zoomIn());
+        ui.zoomOutBtn.addActionListener(e -> zoomOut());
+        ui.ulLangComboBox.addActionListener(e -> onLanguageChanged());
+        ((AbstractDocument) ui.titleField.getDocument()).setDocumentFilter(new TitleFieldFilter());
 
         if (Settings.INSTANCE.getDvdSelected())
-            DVDRadioButton.setSelected(true);
+            ui.DVDRadioButton.setSelected(true);
         else
-            CDRadioButton.setSelected(true);
+            ui.CDRadioButton.setSelected(true);
         recentRomLocation = Settings.INSTANCE.getRomLocation();
-        destinationDirLbl.setText(FilesHelper.getRealFolder(Settings.INSTANCE.getDestination()));
+        ui.destinationDirLbl.setText(FilesHelper.getRealFolder(Settings.INSTANCE.getDestination()));
 
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 Settings.INSTANCE.setRomLocation(recentRomLocation);
-                Settings.INSTANCE.setDestination(destinationDirLbl.getText());
-                Settings.INSTANCE.setDvdSelected(DVDRadioButton.isSelected());
-                Settings.INSTANCE.setLocale(((LocaleHolder) ulLangComboBox.getSelectedItem()).getLocaleCode());
-                Settings.INSTANCE.setScaleFactor(AwesomeMediator.getScaleValue());
+                Settings.INSTANCE.setDestination(ui.destinationDirLbl.getText());
+                Settings.INSTANCE.setDvdSelected(ui.DVDRadioButton.isSelected());
+                Settings.INSTANCE.setLocale(((LocaleHolder) ui.ulLangComboBox.getSelectedItem()).getLocaleCode());
             }
         });
     }
 
     private void setupKeyboardShortcuts() {
-        javax.swing.InputMap inputMap = mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        InputMap inputMap = ui.mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ADD, InputEvent.CTRL_DOWN_MASK), "zoomIn");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, InputEvent.CTRL_DOWN_MASK), "zoomOut");
         Action zoomAction = new AbstractAction() {
@@ -148,278 +112,137 @@ public class MainAppUi extends JFrame {
                     zoomOut();
             }
         };
-        mainPanel.getActionMap().put("zoomIn", zoomAction);
-        mainPanel.getActionMap().put("zoomOut", zoomAction);
-    }
-
-    private void applyScaling() {
-        components = Arrays.stream(mainPanel.getComponents()).collect(Collectors.toList());
-        components.add(statusLbl);
-        components.add(ulLangComboBox);
-
-        ScaleUi.applyInitialScale(components);
+        ui.mainPanel.getActionMap().put("zoomIn", zoomAction);
+        ui.mainPanel.getActionMap().put("zoomOut", zoomAction);
     }
 
     private void zoomIn() {
-        ScaleUi.increaseScale(components);
+        ScaleUi.increaseScale(ui.scalableComponents);
         pack();
     }
 
     private void zoomOut() {
-        ScaleUi.decreaseScale(components);
+        ScaleUi.decreaseScale(ui.scalableComponents);
         pack();
     }
 
     private void diskImageSelectEventHandler() {
-        File diskImageFile = new TwFileChooser(recentRomLocation, msg("SelectDiskImageText"), true)
-                .getFile();
-        if (diskImageFile != null)
-            setDiskImageFile(diskImageFile);
-    }
-
-    public void setDiskImageFile(File imageFile) {
-        try {
-            recentRomLocation = imageFile.getParent();
-            ISO9660 iso9660 = new ISO9660(imageFile);
-            publisherTitle = iso9660.getTitle();
-
-            diskImageNameLbl.setText(imageFile.getName());
-            convertBtn.setEnabled(true);
-            statusLbl.setText(imageFile.getAbsolutePath());
-
-            diskImage = imageFile;
-            setProposedTitle();
-        }
-        catch (Exception e) {
-            statusLbl.setText(e.getMessage());
-            e.printStackTrace();
+        File diskImageFile = new TwFileChooser(recentRomLocation,
+                texts.text("SelectDiskImageText"), true).getFile();
+        if (diskImageFile != null) {
+            recentRomLocation = diskImageFile.getParent();
+            conversion.setDiskImage(diskImageFile);
         }
     }
 
-    private void setProposedTitle() {
-        String proposedName = diskImage.getName().replaceAll("(\\..*)|(\\[.*)", "").trim();
-        if (proposedName.length() > 31)
-            proposedName = proposedName.substring(0, 31);
-        else if (proposedName.isEmpty())
-            proposedName = "My favorite game";
-        titleField.setText(proposedName);
+    public void setDiskImageFile(File diskImageFile) {
+        recentRomLocation = diskImageFile.getParent();
+        conversion.setDiskImage(diskImageFile);
     }
 
     private void destinationSelectEventHandler() {
-        File destination = new TwFileChooser(destinationDirLbl.getText(), msg("SetDestinationDirectoryText"), false)
-                .getFile();
+        File destination = new TwFileChooser(ui.destinationDirLbl.getText(),
+                texts.text("SetDestinationDirectoryText"), false).getFile();
         if (destination != null)
             setDestinationDir(destination);
     }
 
     public void setDestinationDir(File folder) {
-        destinationDirLbl.setText(folder.getAbsolutePath());
-    }
-
-    private void convertButtonAction() {
-        try {
-            if (isConvertingNow) {
-                splitThread.interrupt();
-                convertBtn.setEnabled(false);
-                return;
-            }
-
-            if (titleField.getText().isEmpty()) {
-                setProposedTitle();
-                return;
-            }
-
-            byte chunksCount = (byte) (diskImage.length() / MAX_ISO_LENGTH);
-            if (diskImage.length() % MAX_ISO_LENGTH > 0)
-                chunksCount++;
-
-            UlConfiguration ulConfiguration = new UlConfiguration(
-                    titleField.getText(),
-                    publisherTitle,
-                    chunksCount,
-                    DVDRadioButton.isSelected());
-            UlMaker ulMaker = new UlMaker(
-                    diskImage,
-                    destinationDirLbl.getText(),
-                    ulConfiguration,
-                    new UiUpdater(progressBar, statusLbl));
-            statusLbl.setText(msg("InProgressText"));
-            splitThread = new Thread(ulMaker);
-            splitThread.start();
-            isConvertingNow = true;
-            convertBtn.setText(msg("AbortText"));
-        }
-        catch (Exception e) {
-            statusLbl.setText(e.getMessage());
-        }
-    }
-
-    public void notifySplitFinished() {
-        isConvertingNow = false;
-        convertBtn.setEnabled(true);
-        convertBtn.setText(msg("ConvertBtn"));
+        ui.destinationDirLbl.setText(folder.getAbsolutePath());
     }
 
     private void ulConfigButtonAction() {
-        new UpdateUlTableUi(destinationDirLbl.getText());
+        new UpdateUlTableUi(ui.destinationDirLbl.getText());
     }
 
     private void onLanguageChanged() {
-        Locale newLocale = ((LocaleHolder) requireNonNull(ulLangComboBox.getSelectedItem())).getLocale();
+        Locale newLocale = ((LocaleHolder) requireNonNull(ui.ulLangComboBox.getSelectedItem())).getLocale();
         Locale.setDefault(newLocale);
-        resourceBundle = getBundle("locale");
+        retranslate();
+    }
 
-        diskImageSelectBtn.setText(msg("SelectBtn"));
-        destinationSelectBtn.setText(msg("SelectBtn"));
-        if (isConvertingNow) {
-            convertBtn.setText(msg("AbortText"));
-            statusLbl.setText(msg("InProgressText"));
+    private void retranslate() {
+        texts.refresh();
+        for (Map.Entry<String, Consumer<String>> entry : ui.translatableComponents)
+            entry.getValue().accept(texts.text(entry.getKey()));
+        // convert button text depends on the conversion state
+        ui.convertBtn.setText(texts.text(conversion.isConvertingNow() ? "AbortText" : "ConvertBtn"));
+        if (conversion.isConvertingNow())
+            ui.statusLbl.setText(texts.text("InProgressText"));
+    }
+
+    /**
+     * Wraps the translation source: the bundle is re-loaded on language change.
+     */
+    private static final class Texts {
+        private ResourceBundle bundle = getBundle("locale");
+
+        String text(String key) {
+            return bundle.getString(key);
         }
-        else
-            convertBtn.setText(msg("ConvertBtn"));
 
-        diskImageRoLbl.setText(msg("DiskImageLbl"));
-        titleRoLbl.setText(msg("TitleLbl"));
-        ulDestinationRoLbl.setText(msg("ulDestinationLbl"));
-
-        CDRadioButton.setText(msg("CD"));
-        DVDRadioButton.setText(msg("DVD"));
-        ulCfgBtn.setText(msg("editUlCfgBtn"));
+        void refresh() {
+            bundle = getBundle("locale");
+        }
     }
 
-    private void setupUi() {
-        mainPanel = new JPanel(new GridBagLayout());
+    /**
+     * Wires the controller to the UI without exposing the frame to it.
+     */
+    private final class UiPort implements ConversionPort {
+        @Override
+        public void setStatusText(String text) {
+            ui.statusLbl.setText(text);
+        }
 
-        mainPanel.add(createBannerPanel(),
-                placeInsets0(0, 0, GRID_COLS, CENTER, BOTH, 1, 0));
-        mainPanel.add(Box.createGlue(),
-                placeInsets0(0, 1, GRID_COLS, NORTH, HORIZONTAL, 0f, 1.1f));
+        @Override
+        public void setLocalizedStatus(String key) {
+            ui.statusLbl.setText(texts.text(key));
+        }
 
-        addGapStruts();
+        @Override
+        public void setDiskImageName(String name) {
+            ui.diskImageNameLbl.setText(name);
+        }
 
-        diskImageSelectBtn = new JButton(msg("SelectBtn"));
-        diskImageSelectBtn.setBackground(SELECT_BTN_BG);
-        mainPanel.add(diskImageSelectBtn,
-                place(0, 2, 3, CENTER, HORIZONTAL, 0, 0, new Insets(4, 5, 0, 0)));
+        @Override
+        public void setConvertButtonEnabled(boolean enabled) {
+            ui.convertBtn.setEnabled(enabled);
+        }
 
-        diskImageRoLbl = new JLabel(msg("DiskImageLbl"));
-        mainPanel.add(diskImageRoLbl,
-                place(4, 2, 1, WEST, HORIZONTAL, 0, 0, new Insets(4, 0, 0, 0)));
+        @Override
+        public void setConvertButtonText(String key) {
+            ui.convertBtn.setText(texts.text(key));
+        }
 
-        diskImageNameLbl = new JLabel();
-        mainPanel.add(diskImageNameLbl,
-                place(6, 2, 1, WEST, HORIZONTAL, 1, 0, new Insets(4, 0, 0, 0)));
+        @Override
+        public void setTitle(String title) {
+            ui.titleField.setText(title);
+        }
 
-        ulCfgBtn = new JButton(msg("editUlCfgBtn"));
-        ulCfgBtn.setBackground(UL_CFG_BTN_BG);
-        mainPanel.add(ulCfgBtn,
-                place(8, 2, 1, CENTER, HORIZONTAL, 0.2f, 0f, new Insets(4, 0, 0, 5)));
+        @Override
+        public JProgressBar progressBar() {
+            return ui.progressBar;
+        }
 
-        CDRadioButton = new JRadioButton(msg("CD"));
-        mainPanel.add(CDRadioButton,
-                place(0, 3, 1, CENTER, NONE, 0, 0, new Insets(4, 0, 4, 0)));
+        @Override
+        public JLabel statusLabel() {
+            return ui.statusLbl;
+        }
 
-        DVDRadioButton = new JRadioButton(msg("DVD"));
-        mainPanel.add(DVDRadioButton,
-                place(2, 3, 1, CENTER, NONE, 0, 0, new Insets(4, 0, 4, 0)));
+        @Override
+        public String titleFieldText() {
+            return ui.titleField.getText();
+        }
 
-        titleRoLbl = new JLabel(msg("TitleLbl"));
-        mainPanel.add(titleRoLbl,
-                place(4, 3, 1, WEST, HORIZONTAL, 0, 0, new Insets(4, 0, 4, 0)));
+        @Override
+        public String destinationDir() {
+            return ui.destinationDirLbl.getText();
+        }
 
-        titleField = new JTextField();
-        titleField.setPreferredSize(new Dimension(150, 16));
-        mainPanel.add(titleField,
-                place(6, 3, 3, CENTER, HORIZONTAL, 0, 0, new Insets(4, 0, 4, 5)));
-
-        destinationSelectBtn = new JButton(msg("SelectBtn"));
-        destinationSelectBtn.setBackground(SELECT_BTN_BG);
-        mainPanel.add(destinationSelectBtn,
-                place(0, 4, 3, CENTER, HORIZONTAL, 0, 0, new Insets(4, 5, 0, 0)));
-
-        ulDestinationRoLbl = new JLabel(msg("ulDestinationLbl"));
-        mainPanel.add(ulDestinationRoLbl,
-                place(4, 4, 1, WEST, HORIZONTAL, 0, 0, new Insets(4, 0, 0, 0)));
-
-        destinationDirLbl = new JLabel("");
-        mainPanel.add(destinationDirLbl,
-                place(6, 4, 3, WEST, HORIZONTAL, 0, 0, new Insets(4, 0, 0, 0)));
-
-        convertBtn = new JButton(msg("ConvertBtn"));
-        convertBtn.setBackground(SELECT_BTN_BG);
-        convertBtn.setMinimumSize(new Dimension(convertBtn.getMinimumSize().width, 50));
-        mainPanel.add(convertBtn,
-                place(0, 5, GRID_COLS, CENTER, HORIZONTAL, 0, 0, new Insets(4, 5, 4, 5)));
-
-        progressBar = new JProgressBar();
-        progressBar.setBorderPainted(false);
-        progressBar.setForeground(PROGRESS_COLOR);
-        progressBar.setIndeterminate(false);
-        mainPanel.add(progressBar,
-                place(0, 6, GRID_COLS, NORTH, HORIZONTAL, 0, 0, new Insets(4, 0, 4, 0)));
-
-        statusJPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
-        statusJPanel.setBackground(Color.WHITE);
-        mainPanel.add(statusJPanel,
-                place(0, 7, GRID_COLS, CENTER, BOTH, 0, 0, new Insets(4, 0, 0, 0)));
-
-        statusLbl = new JLabel(msg("WelcomeText"));
-        statusJPanel.add(statusLbl);
-
-        ButtonGroup driveButtonGroup = new ButtonGroup();
-        driveButtonGroup.add(DVDRadioButton);
-        driveButtonGroup.add(CDRadioButton);
-    }
-
-    private JPanel createBannerPanel() {
-        JPanel banner = new JPanel(new GridBagLayout());
-        banner.setBackground(COLOR_SKY_BLUE);
-
-        JLabel bannerLabel = new JLabel();
-        bannerLabel.setIcon(new ImageIcon(requireNonNull(getClass().getResource("/banner.png"))));
-        banner.add(bannerLabel, placeInsets0(0, 0, 1, CENTER, NONE, 1, 0));
-
-        ulLangComboBox = new LanguageComboBox();
-        ulLangComboBox.addActionListener(e -> onLanguageChanged());
-        banner.add(ulLangComboBox, placeInsets0(1, 0, 1, NORTHWEST, HORIZONTAL, 0, 0));
-
-        zoomInBtn = new TwZoomButton("/zoom-in.png");
-        zoomOutBtn = new TwZoomButton("/zoom-out.png");
-        banner.add(new TwZoomPanel(zoomInBtn, zoomOutBtn),
-                placeInsets0(0, 0, 1, NORTHWEST, NONE, 0, 0));
-
-        return banner;
-    }
-
-    private void addGapStruts() {
-        mainPanel.add(Box.createHorizontalStrut(8), placeGapStruts(1));
-        mainPanel.add(Box.createHorizontalStrut(8), placeGapStruts(3));
-        mainPanel.add(Box.createHorizontalStrut(4), placeGapStruts(5));
-        mainPanel.add(Box.createHorizontalStrut(8), placeGapStruts(7));
-    }
-
-    private GridBagConstraints placeGapStruts(int gridx) {
-        return placeInsets0(gridx, 2, 1, CENTER, NONE, 0, 0);
-    }
-
-    private GridBagConstraints placeInsets0(int gridx, int gridy, int gridwidth,
-                                            int anchor, int fill, float weightx, float weighty) {
-        return place(gridx, gridy, gridwidth, anchor, fill, weightx, weighty,
-                new Insets(0, 0, 0, 0));
-    }
-
-    private GridBagConstraints place(int gridx, int gridy, int gridwidth,
-                                     int anchor, int fill, float weightx, float weighty,
-                                     Insets insets) {
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = gridx;
-        c.gridy = gridy;
-        c.gridwidth = gridwidth;
-        c.anchor = anchor;
-        c.fill = fill;
-        c.weightx = weightx;
-        c.weighty = weighty;
-        c.insets = insets;
-        return c;
+        @Override
+        public boolean isDvdSelected() {
+            return ui.DVDRadioButton.isSelected();
+        }
     }
 }
