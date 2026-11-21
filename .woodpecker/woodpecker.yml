@@ -2,7 +2,7 @@ steps:
   - name: build
     when:
       event: [ tag, push, manual]
-    image: maven:3-openjdk-17
+    image: maven:3-openjdk-8
     commands:
       - mvn -B -DskipTests clean package
       - mvn test -B
