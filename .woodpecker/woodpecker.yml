@@ -4,8 +4,7 @@ steps:
       event: [ tag, push, manual]
     image: maven:3-openjdk-8
     commands:
-      - mvn -B -DskipTests clean package
-      - mvn test -B
+      - mvn -B clean package
       - mkdir artifacts
       - cp target/Tihwin-*[0-9].jar artifacts
       - cp target/Tihwin-*[0-9].exe artifacts

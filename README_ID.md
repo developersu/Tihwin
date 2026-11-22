@@ -1,14 +1,11 @@
 ## Tihwin
-![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
-![LatestVer](https://img.shields.io/github/release/developersu/Tihwin.svg)
-[![status-badge](https://ci.redrise.ru/api/badges/6/status.svg)](https://ci.redrise.ru/repos/6)
+![License](https://img.shields.io/badge/License-GPLv3-blue.svg) ![LatestVer](https://img.shields.io/github/release/developersu/Tihwin.svg) [![status-badge](https://ci.redrise.ru/api/badges/6/status.svg)](https://ci.redrise.ru/repos/6)
 
 #### Bahasa Lain
 [![Inggris](flag/us-flag.svg)](README.md)
 [![Rusia](flag/ru-flag.svg)](README_RU.md)
 [![Jepang](flag/jp-flag.svg)](README_JP.md)
-[![Ryukyuan](flag/jp-flag.svg)](README_RYU.md)(Ryukyuan)
-[![Indonesia](flag/id-flag.svg)](README_ID.md)
+[![Ryukyuan](flag/jp-flag.svg)](README_RYU.md)(Ryukyuan) 
 
 Tihwin adalah alat yang kompatibel dengan OPL untuk membuat berkas permainan yang terbagi menjadi beberapa bagian (fragmented). Mirip dengan "ul.cfg manager" atau "USBUtil", dan mendukung sistem operasi Mac serta Linux.
 
